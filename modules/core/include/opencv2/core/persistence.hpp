@@ -437,7 +437,9 @@ public:
     int state; //!< the writer state
 };
 
+#ifndef __BORLANDC__
 template<> CV_EXPORTS void DefaultDeleter<CvFileStorage>::operator ()(CvFileStorage* obj) const;
+#endif
 
 /** @brief File Storage Node class.
 
@@ -602,7 +604,11 @@ public:
     //! returns the currently observed element
     FileNode operator *() const;
     //! accesses the currently observed element methods
+#ifdef __BORLANDC__
+    FileNode* operator ->() const;
+#else
     FileNode operator ->() const;
+#endif
 
     //! moves iterator to the next node
     FileNodeIterator& operator ++ ();
@@ -1185,7 +1191,11 @@ inline FileNodeIterator FileNode::begin() const { return FileNodeIterator(fs, no
 inline FileNodeIterator FileNode::end() const   { return FileNodeIterator(fs, node, size()); }
 inline void FileNode::readRaw( const String& fmt, uchar* vec, size_t len ) const { begin().readRaw( fmt, vec, len ); }
 inline FileNode FileNodeIterator::operator *() const  { return FileNode(fs, (const CvFileNode*)(const void*)reader.ptr); }
+#ifdef __BORLANDC__
+inline FileNode* FileNodeIterator::operator ->() const { return new FileNode(fs, (const CvFileNode*)(const void*)reader.ptr); }
+#else
 inline FileNode FileNodeIterator::operator ->() const { return FileNode(fs, (const CvFileNode*)(const void*)reader.ptr); }
+#endif
 inline String::String(const FileNode& fn): cstr_(0), len_(0) { read(fn, *this, *this); }
 
 //! @endcond

@@ -492,9 +492,15 @@ enum RenderModes {
 @param wndRect Region of window, where to draw a texture (normalized coordinates).
 @param texRect Region of texture to draw (normalized coordinates).
  */
+#ifdef __BORLANDC__
+CV_EXPORTS void render(const Texture2D& tex,
+    Rect_<double> wndRect=cv::Rect(0.0, 0.0, 1.0, 1.0),
+    Rect_<double> texRect=cv::Rect(0.0, 0.0, 1.0, 1.0));
+#else
 CV_EXPORTS void render(const Texture2D& tex,
     Rect_<double> wndRect = Rect_<double>(0.0, 0.0, 1.0, 1.0),
     Rect_<double> texRect = Rect_<double>(0.0, 0.0, 1.0, 1.0));
+#endif
 
 /** @overload
 @param arr Array of privitives vertices.

@@ -81,7 +81,11 @@ protected:
     virtual void deleteSelf() = 0;
 
 private:
+#ifdef __BORLANDC__
+    int refCount;
+#else
     unsigned int refCount;
+#endif
 
     // noncopyable
     PtrOwner(const PtrOwner&);

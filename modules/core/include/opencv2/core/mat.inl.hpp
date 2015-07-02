@@ -1380,7 +1380,11 @@ Mat_<_Tp>::operator Mat_<T2>() const
 template<typename _Tp> inline
 Mat_<_Tp> Mat_<_Tp>::row(int y) const
 {
+#ifdef __BORLANDC__
+    return Mat_<_Tp>(*this, Range(y, y+1), Range::all());
+#else
     return Mat_(*this, Range(y, y+1), Range::all());
+#endif
 }
 
 template<typename _Tp> inline
@@ -1398,7 +1402,11 @@ Mat_<_Tp> Mat_<_Tp>::diag(int d) const
 template<typename _Tp> inline
 Mat_<_Tp> Mat_<_Tp>::clone() const
 {
+#ifdef __BORLANDC__
+    return Mat_<_Tp>(Mat::clone());
+#else
     return Mat_(Mat::clone());
+#endif
 }
 
 template<typename _Tp> inline

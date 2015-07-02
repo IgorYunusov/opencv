@@ -5111,6 +5111,11 @@ stop_search:
 
 ///////////////////////// new C++ interface for CvFileStorage ///////////////////////////
 
+#ifdef __BORLANDC__
+template<> void cv::Ptr<CvFileStorage>::reset<CvFileStorage>(CvFileStorage*) {}
+template<> cv::Ptr<CvFileStorage>& cv::Ptr<CvFileStorage>::operator=(const cv::Ptr<CvFileStorage>&) {}
+#endif
+
 namespace cv
 {
 
@@ -5497,6 +5502,10 @@ void write( FileStorage& fs, const String& name, const SparseMat& value )
 }
 
 
+#ifdef __BORLANDC__
+} // end of namespace cv
+cv::
+#endif
 internal::WriteStructContext::WriteStructContext(FileStorage& _fs,
     const String& name, int flags, const String& typeName) : fs(&_fs)
 {
@@ -5515,6 +5524,9 @@ internal::WriteStructContext::WriteStructContext(FileStorage& _fs,
     }
 }
 
+#ifdef __BORLANDC__
+cv::
+#endif
 internal::WriteStructContext::~WriteStructContext()
 {
     cvEndWriteStruct(**fs);
@@ -5525,6 +5537,9 @@ internal::WriteStructContext::~WriteStructContext()
     fs->elname = String();
 }
 
+#ifdef __BORLANDC__
+namespace cv { // open namespace again
+#endif
 
 void read( const FileNode& node, Mat& mat, const Mat& default_mat )
 {

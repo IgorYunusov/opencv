@@ -49,6 +49,10 @@
 #define CV_NEON 0
 #endif
 
+#ifdef __BORLANDC__
+template<> void cv::Ptr<cv::ParallelLoopBody>::reset<cv::ParallelLoopBody>(cv::ParallelLoopBody*) {}
+#endif
+
 namespace cv
 {
 

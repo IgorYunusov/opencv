@@ -49,6 +49,10 @@
 #  endif
 #endif
 
+#ifdef __BORLANDC__
+template<> cv::Ptr<cv::ogl::Buffer::Impl>& cv::Ptr<cv::ogl::Buffer::Impl>::operator=(const cv::Ptr<cv::ogl::Buffer::Impl>&) {}
+#endif
+
 using namespace cv;
 using namespace cv::cuda;
 

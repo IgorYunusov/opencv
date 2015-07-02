@@ -323,9 +323,7 @@ Cv64suf;
 *                                      fast math                                         *
 \****************************************************************************************/
 
-#if defined __BORLANDC__
-#  include <fastmath.h>
-#elif defined __cplusplus
+#if defined __cplusplus
 #  include <cmath>
 #else
 #  include <math.h>

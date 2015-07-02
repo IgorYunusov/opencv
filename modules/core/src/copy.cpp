@@ -331,7 +331,7 @@ void Mat::copyTo( OutputArray _dst ) const
             }
 #endif
 
-            for( ; sz.height--; sptr += step, dptr += dst.step )
+            for( ; sz.height--; sptr += (size_t)step, dptr += (size_t)dst.step )
                 memcpy( dptr, sptr, len );
         }
         return;

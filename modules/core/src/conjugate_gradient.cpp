@@ -40,6 +40,9 @@
 //M*/
 
 #include "precomp.hpp"
+#ifdef __BORLANDC__
+#include "xe_fix.hpp"
+#endif
 
 #define dprintf(x)
 #define print_matrix(x)

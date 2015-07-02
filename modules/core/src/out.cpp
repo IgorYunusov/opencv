@@ -81,7 +81,11 @@ namespace cv
 
     public:
 
+#ifdef __BORLANDC__
+        FormattedImpl(const String pl, const String el, const Mat m, char const br[5], const bool sLine, const bool aOrder, const int precision)
+#else
         FormattedImpl(String pl, String el, Mat m, char br[5], bool sLine, bool aOrder, int precision)
+#endif
         {
             CV_Assert(m.dims <= 2);
 

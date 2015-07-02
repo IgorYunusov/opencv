@@ -155,11 +155,15 @@ can make debugging more convenient.
 \return the previous state
  */
 CV_EXPORTS bool setBreakOnError(bool flag);
-
+#ifdef __BORLANDC__
+typedef int (*ErrorCallback)( int status, const char* func_name,
+                                       const char* err_msg, const char* file_name,
+                                       int line, void* userdata );
+#else
 extern "C" typedef int (*ErrorCallback)( int status, const char* func_name,
                                        const char* err_msg, const char* file_name,
                                        int line, void* userdata );
-
+#endif
 
 /** @brief Sets the new error handler and the optional user data.
 

@@ -2164,12 +2164,14 @@ Scalar operator * (const Matx<_Tp, 4, 4>& a, const Scalar& b)
     return reinterpret_cast<const Scalar&>(c);
 }
 
+#ifndef __BORLANDC__
 template<> inline
 Scalar operator * (const Matx<double, 4, 4>& a, const Scalar& b)
 {
     Matx<double, 4, 1> c(a, b, Matx_MatMulOp());
     return reinterpret_cast<const Scalar&>(c);
 }
+#endif
 
 
 

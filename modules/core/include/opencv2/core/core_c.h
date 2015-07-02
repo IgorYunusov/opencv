@@ -2782,11 +2782,13 @@ CV_EXPORTS void insertImageCOI(InputArray coiimg, CvArr* arr, int coi=-1);
 
 ////// specialized implementations of DefaultDeleter::operator() for classic OpenCV types //////
 
+#ifndef __BORLANDC__
 template<> CV_EXPORTS void DefaultDeleter<CvMat>::operator ()(CvMat* obj) const;
 template<> CV_EXPORTS void DefaultDeleter<IplImage>::operator ()(IplImage* obj) const;
 template<> CV_EXPORTS void DefaultDeleter<CvMatND>::operator ()(CvMatND* obj) const;
 template<> CV_EXPORTS void DefaultDeleter<CvSparseMat>::operator ()(CvSparseMat* obj) const;
 template<> CV_EXPORTS void DefaultDeleter<CvMemStorage>::operator ()(CvMemStorage* obj) const;
+#endif
 
 ////////////// convenient wrappers for operating old-style dynamic structures //////////////
 

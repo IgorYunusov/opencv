@@ -45,6 +45,9 @@
 #include <string>
 #include <sstream>
 #include <iostream> // std::cerr
+#ifdef __BORLANDC__
+#include <cstdint>
+#endif
 
 #define CV_OPENCL_ALWAYS_SHOW_BUILD_LOG 0
 #define CV_OPENCL_SHOW_RUN_ERRORS       0
@@ -2387,12 +2390,12 @@ not_found:
         return NULL; // suppress messages on stderr
 
     std::cerr << "ERROR: Requested OpenCL device not found, check configuration: " << (configuration == NULL ? "" : configuration) << std::endl
-            << "    Platform: " << (platform.length() == 0 ? "any" : platform) << std::endl
+            << "    Platform: " << (platform.length() == 0 ? std::string("any") : platform) << std::endl
             << "    Device types: ";
     for (size_t t = 0; t < deviceTypes.size(); t++)
         std::cerr << deviceTypes[t] << " ";
 
-    std::cerr << std::endl << "    Device name: " << (deviceName.length() == 0 ? "any" : deviceName) << std::endl;
+    std::cerr << std::endl << "    Device name: " << (deviceName.length() == 0 ? std::string("any") : deviceName) << std::endl;
     return NULL;
 }
 #endif
