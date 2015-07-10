@@ -3251,7 +3251,13 @@ class GTEST_API_ Message {
     // overloads of << defined in the global namespace and those
     // visible via Koenig lookup are both exposed in this function.
     using ::operator <<;
+#ifdef __BORLANDC__
+    // ::std::stringstream ss;
+    // ss << val;
+    // *ss_ << ss;
+#else
     *ss_ << val;
+#endif
     return *this;
   }
 
@@ -3368,6 +3374,13 @@ std::string StreamableToString(const T& streamable) {
 }
 
 }  // namespace internal
+#ifdef __BORLANDC__
+template <>
+inline testing::Message& operator <<(testing::Message& msg, const std::string& val) {
+    // don't know how to implement this...
+    return msg;
+}
+#endif
 }  // namespace testing
 
 #endif  // GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
@@ -15943,7 +15956,14 @@ ValuesIn(ForwardIterator begin, ForwardIterator end) {
 
 template <typename T, size_t N>
 internal::ParamGenerator<T> ValuesIn(const T (&array)[N]) {
+#ifdef __BORLANDC__
+  std::vector<T> v;
+  for (size_t i = 0; i < N; i++)
+    v.push_back(array[i]);
+  return ValuesIn(v.begin(), v.end());
+#else
   return ValuesIn(array, array + N);
+#endif
 }
 
 template <class Container>
