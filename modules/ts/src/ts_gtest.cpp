@@ -3283,7 +3283,14 @@ static const char* const kReservedTestCaseAttributes[] = {
 
 template <int kSize>
 std::vector<std::string> ArrayAsVector(const char* const (&array)[kSize]) {
+#ifdef __BORLANDC__
+  std::vector<std::string> v;
+  for (int i = 0; i < kSize; i++)
+    v.push_back(array[i]);
+  return v;
+#else
   return std::vector<std::string>(array, array + kSize);
+#endif
 }
 
 static std::vector<std::string> GetReservedAttributesForElement(
@@ -4776,7 +4783,7 @@ void XmlUnitTestResultPrinter::OutputXmlAttribute(
     const std::string& name,
     const std::string& value) {
   const std::vector<std::string>& allowed_names =
-      GetReservedAttributesForElement(element_name);
+      testing::GetReservedAttributesForElement(element_name);
 
   GTEST_CHECK_(std::find(allowed_names.begin(), allowed_names.end(), name) !=
                    allowed_names.end())
@@ -9465,7 +9472,7 @@ using internal::GetUnitTestImpl;
 // in it.
 std::string TestPartResult::ExtractSummary(const char* message) {
   const char* const stack_trace = strstr(message, internal::kStackTraceMarker);
-  return stack_trace == NULL ? message :
+  return stack_trace == NULL ? std::string(message) :
       std::string(message, stack_trace);
 }
 

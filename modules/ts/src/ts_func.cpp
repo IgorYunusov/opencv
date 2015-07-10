@@ -223,7 +223,7 @@ void add(const Mat& _a, double alpha, const Mat& _b, double beta,
             }
             if( calcAbs )
                 for( k = 0; k < n; k++ )
-                    aptr[k] = fabs(aptr[k]);
+                    aptr[k] = std::fabs(aptr[k]);
             apart.convertTo(cpart0, cpart0.type(), 1, 0);
         }
     }
@@ -1403,7 +1403,7 @@ double PSNR(InputArray _src1, InputArray _src2)
 {
     CV_Assert( _src1.depth() == CV_8U );
     double diff = std::sqrt(cvtest::norm(_src1, _src2, NORM_L2SQR)/(_src1.total()*_src1.channels()));
-    return 20*log10(255./(diff+DBL_EPSILON));
+    return 20*std::log10(255./(diff+DBL_EPSILON));
 }
 
 template<typename _Tp> static double
@@ -1753,7 +1753,7 @@ template<> double cmpUlpsInt_<int>(const int* src1, const int* src2,
     double realmaxdiff = 0;
     for( i = 0; i < total; i++ )
     {
-        double diff = fabs((double)src1[i] - (double)src2[i]);
+        double diff = std::fabs((double)src1[i] - (double)src2[i]);
         if( realmaxdiff < diff )
         {
             realmaxdiff = diff;
@@ -1797,7 +1797,7 @@ cmpUlpsFlt_(const int64* src1, const int64* src2, size_t total, int imaxdiff, si
     {
         int64 a = src1[i], b = src2[i];
         if( a < 0 ) a ^= C; if( b < 0 ) b ^= C;
-        double diff = fabs((double)a - (double)b);
+        double diff = std::fabs((double)a - (double)b);
         if( realmaxdiff < diff )
         {
             realmaxdiff = diff;
@@ -2030,8 +2030,8 @@ int cmpEps( const Mat& arr, const Mat& refarr, double* _realmaxdiff,
                     idx = startidx + j;
                     break;
                 }
-                a_val = fabs(a_val - b_val);
-                threshold = element_wise_relative_error ? fabs(b_val) + 1 : maxval;
+                a_val = std::fabs(a_val - b_val);
+                threshold = element_wise_relative_error ? std::fabs(b_val) + 1 : maxval;
                 if( a_val > threshold*success_err_level )
                 {
                     realmaxdiff = a_val/threshold;
@@ -2061,8 +2061,8 @@ int cmpEps( const Mat& arr, const Mat& refarr, double* _realmaxdiff,
                     idx = startidx + j;
                     break;
                 }
-                a_val = fabs(a_val - b_val);
-                threshold = element_wise_relative_error ? fabs(b_val) + 1 : maxval;
+                a_val = std::fabs(a_val - b_val);
+                threshold = element_wise_relative_error ? std::fabs(b_val) + 1 : maxval;
                 if( a_val > threshold*success_err_level )
                 {
                     realmaxdiff = a_val/threshold;
@@ -2661,14 +2661,14 @@ void  patchZeros( Mat& mat, double level )
         {
             float* data = mat.ptr<float>(i);
             for( j = 0; j < ncols; j++ )
-                if( fabs(data[j]) < level )
+                if( std::fabs(data[j]) < level )
                     data[j] += 1;
         }
         else
         {
             double* data = mat.ptr<double>(i);
             for( j = 0; j < ncols; j++ )
-                if( fabs(data[j]) < level )
+                if( std::fabs(data[j]) < level )
                     data[j] += 1;
         }
     }

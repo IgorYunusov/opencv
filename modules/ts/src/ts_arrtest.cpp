@@ -107,9 +107,9 @@ void ArrayTest::get_test_array_types_and_sizes( int /*test_case_idx*/, vector<ve
     size_t i, j;
 
     val = randReal(rng) * (max_log_array_size - min_log_array_size) + min_log_array_size;
-    size.width = cvRound( exp(val*CV_LOG2) );
+    size.width = cvRound( std::exp(val*CV_LOG2) );
     val = randReal(rng) * (max_log_array_size - min_log_array_size) + min_log_array_size;
-    size.height = cvRound( exp(val*CV_LOG2) );
+    size.height = cvRound( std::exp(val*CV_LOG2) );
 
     for( i = 0; i < test_array.size(); i++ )
     {

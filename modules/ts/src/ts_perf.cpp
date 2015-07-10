@@ -787,7 +787,7 @@ void TestBase::Init(const std::vector<std::string> & availableImpls,
 
     ::testing::AddGlobalTestEnvironment(new PerfEnvironment);
 
-    param_impl          = args.has("perf_run_cpu") ? "plain" : args.get<std::string>("perf_impl");
+    param_impl          = args.has("perf_run_cpu") ? std::string("plain") : args.get<std::string>("perf_impl");
     std::string perf_strategy = args.get<std::string>("perf_strategy");
     if (perf_strategy == "default")
     {
@@ -1125,8 +1125,8 @@ bool TestBase::next()
 
             calcMetrics();
 
-            if (fabs(metrics.mean) > 1e-6)
-                has_next = metrics.stddev > perf_stability_criteria * fabs(metrics.mean);
+            if (std::fabs(metrics.mean) > 1e-6)
+                has_next = metrics.stddev > perf_stability_criteria * std::fabs(metrics.mean);
             else
                 has_next = true;
         }
@@ -1138,7 +1138,7 @@ bool TestBase::next()
         double median_ms = metrics.median * 1000.0f / metrics.frequency;
 
         const ::testing::TestInfo* const test_info = ::testing::UnitTest::GetInstance()->current_test_info();
-        std::string name = (test_info == 0) ? "" :
+        std::string name = (test_info == 0) ? std::string("") :
                 std::string(test_info->test_case_name()) + "--" + test_info->name();
 
         if (!perf_validation_results.empty() && !name.empty())
@@ -1152,7 +1152,7 @@ bool TestBase::next()
                 found = true;
                 double prev_result = i->second;
                 grow = median_ms > prev_result;
-                isSame = fabs(median_ms - prev_result) <= perf_validation_criteria * fabs(median_ms);
+                isSame = std::fabs(median_ms - prev_result) <= perf_validation_criteria * std::fabs(median_ms);
                 if (!isSame)
                 {
                     if (perfValidationStage == 0)
@@ -1180,7 +1180,7 @@ bool TestBase::next()
                     }
                     else if (found && currentIter >= nIters &&
                             median_ms > perf_validation_time_threshold_ms &&
-                            (grow || metrics.stddev > perf_stability_criteria * fabs(metrics.mean)))
+                            (grow || metrics.stddev > perf_stability_criteria * std::fabs(metrics.mean)))
                     {
                         printf("Performance is unstable, it may be a result of overheat problems\n");
                         printf("Idle delay for %d ms... \n", perf_validation_idle_delay_ms);
@@ -1321,7 +1321,7 @@ performance_metrics& TestBase::calcMetrics()
         {
             double x = static_cast<double>(*i)/runsPerIteration;
             if (x < DBL_EPSILON) continue;
-            double lx = log(x);
+            double lx = std::log(x);
 
             ++n;
             double delta = lx - gmean;
@@ -1329,14 +1329,14 @@ performance_metrics& TestBase::calcMetrics()
             gstddev += delta * (lx - gmean);
         }
 
-        gstddev = n > 1 ? sqrt(gstddev / (n - 1)) : 0;
+        gstddev = n > 1 ? std::sqrt(gstddev / (n - 1)) : 0;
 
         //filter outliers assuming log-normal distribution
         //http://stackoverflow.com/questions/1867426/modeling-distribution-of-performance-measurements
         if (gstddev > DBL_EPSILON)
         {
-            double minout = exp(gmean - 3 * gstddev) * runsPerIteration;
-            double maxout = exp(gmean + 3 * gstddev) * runsPerIteration;
+            double minout = std::exp(gmean - 3 * gstddev) * runsPerIteration;
+            double maxout = std::exp(gmean + 3 * gstddev) * runsPerIteration;
             while(*start < minout) ++start, ++metrics.outliers;
             do --end, ++metrics.outliers; while(*end > maxout);
             ++end, --metrics.outliers;
@@ -1368,7 +1368,7 @@ performance_metrics& TestBase::calcMetrics()
         double x = static_cast<double>(*start)/runsPerIteration;
         if (x > DBL_EPSILON)
         {
-            double lx = log(x);
+            double lx = std::log(x);
             ++m;
             double gdelta = lx - gmean;
             gmean += gdelta / m;
@@ -1381,9 +1381,9 @@ performance_metrics& TestBase::calcMetrics()
     }
 
     metrics.mean = mean;
-    metrics.gmean = exp(gmean);
-    metrics.gstddev = m > 1 ? sqrt(gstddev / (m - 1)) : 0;
-    metrics.stddev = n > 1 ? sqrt(stddev / (n - 1)) : 0;
+    metrics.gmean = std::exp(gmean);
+    metrics.gstddev = m > 1 ? std::sqrt(gstddev / (m - 1)) : 0;
+    metrics.stddev = n > 1 ? std::sqrt(stddev / (n - 1)) : 0;
     metrics.median = (n % 2
             ? (double)times[offset + n / 2]
             : 0.5 * (times[offset + n / 2] + times[offset + n / 2 - 1])
@@ -1408,7 +1408,7 @@ void TestBase::validateMetrics()
 
         if (m.gstddev > DBL_EPSILON)
         {
-            EXPECT_GT(/*m.gmean * */1., /*m.gmean * */ 2 * sinh(m.gstddev * param_max_deviation))
+            EXPECT_GT(/*m.gmean * */1., /*m.gmean * */ 2 * std::sinh(m.gstddev * param_max_deviation))
               << "  Test results are not reliable ((mean-sigma,mean+sigma) deviation interval is greater than measured time interval).";
         }
 
@@ -1546,7 +1546,7 @@ void TestBase::reportMetrics(bool toJUnitXML)
             LOGD("min       =%11.0f = %.2fms", m.min, m.min * 1e3 / m.frequency);
             LOGD("median    =%11.0f = %.2fms", m.median, m.median * 1e3 / m.frequency);
             LOGD("gmean     =%11.0f = %.2fms", m.gmean, m.gmean * 1e3 / m.frequency);
-            LOGD("gstddev   =%11.8f = %.2fms for 97%% dispersion interval", m.gstddev, m.gmean * 2 * sinh(m.gstddev * 3) * 1e3 / m.frequency);
+            LOGD("gstddev   =%11.8f = %.2fms for 97%% dispersion interval", m.gstddev, m.gmean * 2 * std::sinh(m.gstddev * 3) * 1e3 / m.frequency);
             LOGD("mean      =%11.0f = %.2fms", m.mean, m.mean * 1e3 / m.frequency);
             LOGD("stddev    =%11.0f = %.2fms", m.stddev, m.stddev * 1e3 / m.frequency);
         }
@@ -1701,10 +1701,10 @@ void TestBase::RunPerfTestBody()
         #endif
         FAIL() << "Expected: PerfTestBody() doesn't throw an exception.\n  Actual: it throws cv::Exception:\n  " << e.what();
     }
-    catch(std::exception& e)
+    catch(std::exception& stde)
     {
         metrics.terminationReason = performance_metrics::TERM_EXCEPTION;
-        FAIL() << "Expected: PerfTestBody() doesn't throw an exception.\n  Actual: it throws std::exception:\n  " << e.what();
+        FAIL() << "Expected: PerfTestBody() doesn't throw an exception.\n  Actual: it throws std::exception:\n  " << stde.what();
     }
     catch(...)
     {
