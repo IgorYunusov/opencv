@@ -279,7 +279,7 @@ public:
 
     _OutputArray();
     _OutputArray(int _flags, void* _obj);
-    _OutputArray(Mat& m);
+    explicit _OutputArray(Mat& m);
     _OutputArray(std::vector<Mat>& vec);
     _OutputArray(cuda::GpuMat& d_mat);
     _OutputArray(ogl::Buffer& buf);
@@ -289,7 +289,7 @@ public:
     _OutputArray(std::vector<bool>& vec);
     template<typename _Tp> _OutputArray(std::vector<std::vector<_Tp> >& vec);
     template<typename _Tp> _OutputArray(std::vector<Mat_<_Tp> >& vec);
-    template<typename _Tp> _OutputArray(Mat_<_Tp>& m);
+    explicit template<typename _Tp> _OutputArray(Mat_<_Tp>& m);
     template<typename _Tp> _OutputArray(_Tp* vec, int n);
     template<typename _Tp, int m, int n> _OutputArray(Matx<_Tp, m, n>& matx);
     _OutputArray(UMat& m);

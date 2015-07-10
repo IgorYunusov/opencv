@@ -1390,13 +1390,21 @@ Mat_<_Tp> Mat_<_Tp>::row(int y) const
 template<typename _Tp> inline
 Mat_<_Tp> Mat_<_Tp>::col(int x) const
 {
+#ifdef __BORLANDC__
+    return Mat_<_Tp>(*this, Range::all(), Range(x, x+1));
+#else
     return Mat_(*this, Range::all(), Range(x, x+1));
+#endif
 }
 
 template<typename _Tp> inline
 Mat_<_Tp> Mat_<_Tp>::diag(int d) const
 {
+#ifdef __BORLANDC__
+    return Mat_<_Tp>(Mat::diag(d));
+#else
     return Mat_(Mat::diag(d));
+#endif
 }
 
 template<typename _Tp> inline

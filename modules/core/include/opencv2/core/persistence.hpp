@@ -831,7 +831,11 @@ namespace internal
 template<typename _Tp> static inline
 void write(FileStorage& fs, const _Tp& value)
 {
+#ifdef __BORLANDC__
+    write<_Tp>(fs, String(), value);
+#else
     write(fs, String(), value);
+#endif
 }
 
 template<> inline

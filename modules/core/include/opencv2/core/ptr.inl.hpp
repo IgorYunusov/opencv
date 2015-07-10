@@ -163,7 +163,11 @@ Ptr<T>::~Ptr()
 template<typename T>
 Ptr<T>& Ptr<T>::operator = (const Ptr<T>& o)
 {
+#ifdef __BORLANDC__
+    Ptr<T>(o).swap(*this);
+#else
     Ptr(o).swap(*this);
+#endif
     return *this;
 }
 
@@ -171,7 +175,11 @@ template<typename T>
 template<typename Y>
 Ptr<T>& Ptr<T>::operator = (const Ptr<Y>& o)
 {
+#ifdef __BORLANDC__
+    Ptr<T>(o).swap(*this);
+#else
     Ptr(o).swap(*this);
+#endif
     return *this;
 }
 
@@ -187,14 +195,22 @@ template<typename T>
 template<typename Y>
 void Ptr<T>::reset(Y* p)
 {
+#ifdef __BORLANDC__
+    Ptr<T>(p).swap(*this);
+#else
     Ptr(p).swap(*this);
+#endif
 }
 
 template<typename T>
 template<typename Y, typename D>
 void Ptr<T>::reset(Y* p, D d)
 {
+#ifdef __BORLANDC__
+    Ptr<T>(p, d).swap(*this);
+#else
     Ptr(p, d).swap(*this);
+#endif
 }
 
 template<typename T>
