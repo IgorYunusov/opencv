@@ -5111,11 +5111,6 @@ stop_search:
 
 ///////////////////////// new C++ interface for CvFileStorage ///////////////////////////
 
-#ifdef __BORLANDC__
-template<> void cv::Ptr<CvFileStorage>::reset<CvFileStorage>(CvFileStorage*) {}
-template<> cv::Ptr<CvFileStorage>& cv::Ptr<CvFileStorage>::operator=(const cv::Ptr<CvFileStorage>&) {}
-#endif
-
 namespace cv
 {
 

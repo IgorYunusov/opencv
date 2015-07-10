@@ -39,9 +39,6 @@
 //
 //M*/
 #include "precomp.hpp"
-#ifdef __BORLANDC__
-#include "xe_fix.hpp"
-#endif
 
 #if 0
 #define dprintf(x) printf x
