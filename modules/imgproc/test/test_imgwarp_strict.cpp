@@ -98,7 +98,7 @@ protected:
 };
 
 CV_ImageWarpBaseTest::CV_ImageWarpBaseTest() :
-    BaseTest(), interpolation(-1),
+    cvtest::BaseTest(), interpolation(-1),
     src(), dst(), reference_dst()
 {
     test_case_count = 40;
@@ -131,7 +131,7 @@ String CV_ImageWarpBaseTest::interpolation_to_string(int inter) const
     if (inverse)
         str += " | WARP_INVERSE_MAP";
 
-    return str.empty() ? "Unsupported/Unkown interpolation type" : str;
+    return str.empty() ? String("Unsupported/Unkown interpolation type") : str;
 }
 
 Size CV_ImageWarpBaseTest::randSize(RNG& rng) const
@@ -258,7 +258,7 @@ void CV_ImageWarpBaseTest::validate_results() const
         const float* D = _dst.ptr<float>(dy);
 
         for (int dx = 0; dx < dsize.width; ++dx)
-            if (fabs(rD[dx] - D[dx]) > t &&
+            if (std::fabs(rD[dx] - D[dx]) > t &&
 //                fabs(rD[dx] - D[dx]) < 250.0f &&
                 rD[dx] <= 255.0f && D[dx] <= 255.0f && rD[dx] >= 0.0f && D[dx] >= 0.0f)
             {
@@ -271,8 +271,8 @@ void CV_ImageWarpBaseTest::validate_results() const
                 double scale_x = static_cast<double>(ssize.width) / dsize.width;
                 double scale_y = static_cast<double>(ssize.height) / dsize.height;
                 bool area_fast = interpolation == INTER_AREA &&
-                    fabs(scale_x - cvRound(scale_x)) < FLT_EPSILON &&
-                    fabs(scale_y - cvRound(scale_y)) < FLT_EPSILON;
+                    std::fabs(scale_x - cvRound(scale_x)) < FLT_EPSILON &&
+                    std::fabs(scale_y - cvRound(scale_y)) < FLT_EPSILON;
                 if (area_fast)
                 {
                     scale_y = cvRound(scale_y);
@@ -399,7 +399,7 @@ namespace
         }
 
         float sum = 0;
-        double y0=-(x+3)*CV_PI*0.25, s0 = sin(y0), c0=cos(y0);
+        double y0=-(x+3)*CV_PI*0.25, s0 = std::sin(y0), c0=std::cos(y0);
         for(int i = 0; i < 8; i++ )
         {
             double y = -(x+3-i)*CV_PI*0.25;
@@ -424,8 +424,8 @@ void CV_Resize_Test::generate_test_data()
     scale_y = src.rows / static_cast<double>(dst.rows);
 
     area_fast = interpolation == INTER_AREA &&
-        fabs(scale_x - cvRound(scale_x)) < FLT_EPSILON &&
-        fabs(scale_y - cvRound(scale_y)) < FLT_EPSILON;
+        std::fabs(scale_x - cvRound(scale_x)) < FLT_EPSILON &&
+        std::fabs(scale_y - cvRound(scale_y)) < FLT_EPSILON;
     if (area_fast)
     {
         scale_x = cvRound(scale_x);
@@ -545,7 +545,7 @@ void CV_Resize_Test::resize_1d(const Mat& _src, Mat& _dst, int dy, const dim& _d
         for (int k = 0; k < ksize; ++k)
         {
             memcpy(_extended_src_row.ptr() + k * elemsize, srow, elemsize);
-            memcpy(_extended_src_row.ptr() + (ksize + k) * elemsize + _src.step, srow + _src.step - elemsize, elemsize);
+            memcpy(_extended_src_row.ptr() + (ksize + k) * elemsize + (size_t)_src.step, srow + (size_t)_src.step - elemsize, elemsize);
         }
 
         for (int dx = 0; dx < dsize.width; ++dx)

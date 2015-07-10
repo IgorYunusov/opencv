@@ -128,7 +128,7 @@ namespace cvtest
         d = radius*2 + 1;
         // compute the min/max range for the input image (even if multichannel)
 
-        minMaxLoc( src.reshape(1), &minValSrc, &maxValSrc );
+        cv::minMaxLoc( src.reshape(1), &minValSrc, &maxValSrc );
         if(std::abs(minValSrc - maxValSrc) < FLT_EPSILON)
         {
             src.copyTo(dst);

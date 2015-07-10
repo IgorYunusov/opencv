@@ -182,7 +182,7 @@ public:
         const uchar* yS = src.ptr<uchar>(range.start);
         uchar* yD = dst.ptr<uchar>(range.start);
 
-        for( int i = range.start; i < range.end; ++i, yS += src.step, yD += dst.step )
+        for( int i = range.start; i < range.end; ++i, yS += (size_t)src.step, yD += (size_t)dst.step )
             cvt((const _Tp*)yS, (_Tp*)yD, src.cols);
     }
 

@@ -341,7 +341,7 @@ static void createConvexHull(cv::InputArray points, std::vector<cv::Point2f> &po
 
     pointsMat.convertTo(pointsVector, CV_32F);
 
-    convexHull(pointsVector, polygon, true, true);
+    cv::convexHull(pointsVector, polygon, true, true);
 }
 
 //! Find the minimum enclosing triangle and its area

@@ -953,7 +953,7 @@ __ocv_canny_push:
     // the final pass, form the final image
     const uchar* pmap = map + mapstep + 1;
     uchar* pdst = dst.ptr();
-    for (int i = 0; i < src.rows; i++, pmap += mapstep, pdst += dst.step)
+    for (int i = 0; i < src.rows; i++, pmap += (size_t)mapstep, pdst += (size_t)dst.step)
     {
         for (int j = 0; j < src.cols; j++)
             pdst[j] = (uchar)-(pmap[j] >> 1);
