@@ -110,7 +110,7 @@ Thanks to:
 #  include "dvdmedia.h"
 #  include "bdaiface.h"
 #else
-#  ifdef _MSC_VER
+#  if defined _MSC_VER || __BORLANDC__
 #  define __extension__
    typedef BOOL WINBOOL;
 #endif
@@ -354,7 +354,11 @@ static void DebugPrintOut(const char *format, ...)
     }
 }
 #else
+#ifdef __BORLANDC__
+static void DebugPrintOut(const char *format, ...){}
+#else
 #define DebugPrintOut(...) void()
+#endif
 #endif
 
 //if you need VI to use multi threaded com

@@ -638,8 +638,10 @@ protected:
                                     Size frameSize, bool isColor = true);
 };
 
+#ifndef __BORLANDC__
 template<> CV_EXPORTS void DefaultDeleter<CvCapture>::operator ()(CvCapture* obj) const;
 template<> CV_EXPORTS void DefaultDeleter<CvVideoWriter>::operator ()(CvVideoWriter* obj) const;
+#endif
 
 //! @} videoio
 

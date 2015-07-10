@@ -72,6 +72,9 @@ private:
     #if defined WIN32 || defined _WIN32
     HMODULE icvFFOpenCV;
 
+#ifdef __BORLANDC__
+public:
+#endif
     ~icvInitFFMPEG()
     {
         if (icvFFOpenCV)
@@ -81,6 +84,9 @@ private:
         }
     }
     #endif
+#ifdef __BORLANDC__
+private:
+#endif
 
     icvInitFFMPEG()
     {

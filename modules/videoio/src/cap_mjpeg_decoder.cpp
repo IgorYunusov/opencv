@@ -790,8 +790,12 @@ std::vector<char> MotionJpegCapture::readFrame(frame_iterator it)
     result.reserve(chunk.m_size);
     result.resize(chunk.m_size);
 
+#ifdef __BORLANDC__
+    char* pResult = &result[0];
+    m_file_stream.read(pResult, chunk.m_size);
+#else
     m_file_stream.read(result.data(), chunk.m_size);
-
+#endif
     return result;
 }
 
