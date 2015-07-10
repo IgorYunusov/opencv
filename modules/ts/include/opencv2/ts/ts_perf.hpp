@@ -17,10 +17,17 @@
 #  define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, PERF_TESTS_LOG_TAG, __VA_ARGS__))
 #  define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, PERF_TESTS_LOG_TAG, __VA_ARGS__))
 # else
+#  ifdef __BORLANDC__
+#   define LOGD(...) do{printf(__VA_ARGS__); printf("\n");fflush(stdout);} while(0)
+#   define LOGI(...) do{printf(__VA_ARGS__); printf("\n");fflush(stdout);} while(0)
+#   define LOGW(...) do{printf(__VA_ARGS__); printf("\n");fflush(stdout);} while(0)
+#   define LOGE(...) do{printf(__VA_ARGS__); printf("\n");fflush(stdout);} while(0)
+#  else
 #  define LOGD(_str, ...) do{printf(_str , ## __VA_ARGS__); printf("\n");fflush(stdout);} while(0)
 #  define LOGI(_str, ...) do{printf(_str , ## __VA_ARGS__); printf("\n");fflush(stdout);} while(0)
 #  define LOGW(_str, ...) do{printf(_str , ## __VA_ARGS__); printf("\n");fflush(stdout);} while(0)
 #  define LOGE(_str, ...) do{printf(_str , ## __VA_ARGS__); printf("\n");fflush(stdout);} while(0)
+#  endif
 # endif
 #endif
 
@@ -177,7 +184,11 @@ public:
 private:
     static Regression& instance();
     Regression();
+#ifdef __BORLANDC__
+public:
     ~Regression();
+private:
+#endif
 
     Regression(const Regression&);
     Regression& operator=(const Regression&);
@@ -383,6 +394,8 @@ protected:
 
     PERF_STRATEGY getCurrentPerformanceStrategy() const;
 
+#ifdef __BORLANDC__
+public:
     enum WarmUpType
     {
         WARMUP_READ,
@@ -390,6 +403,8 @@ protected:
         WARMUP_RNG,
         WARMUP_NONE
     };
+protected:
+#endif
 
     void reportMetrics(bool toJUnitXML = false);
     static void warmup(cv::InputOutputArray a, WarmUpType wtype = WARMUP_READ);
