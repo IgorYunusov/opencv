@@ -46,12 +46,12 @@ struct BaseElemWiseOp
 
         if( !(flags & FIX_ALPHA) )
         {
-            alpha = exp(rng.uniform(-0.5, 0.1)*m*2*CV_LOG2);
+            alpha = std::exp(rng.uniform(-0.5, 0.1)*m*2*CV_LOG2);
             alpha *= rng.uniform(0, 2) ? 1 : -1;
         }
         if( !(flags & FIX_BETA) )
         {
-            beta = exp(rng.uniform(-0.5, 0.1)*m*2*CV_LOG2);
+            beta = std::exp(rng.uniform(-0.5, 0.1)*m*2*CV_LOG2);
             beta *= rng.uniform(0, 2) ? 1 : -1;
         }
 
@@ -59,7 +59,7 @@ struct BaseElemWiseOp
         {
             for( int i = 0; i < 4; i++ )
             {
-                gamma[i] = exp(rng.uniform(-1, 6)*m*CV_LOG2);
+                gamma[i] = std::exp(rng.uniform(-1, 6)*m*CV_LOG2);
                 gamma[i] *= rng.uniform(0, 2) ? 1 : -1;
             }
             if( flags & REAL_GAMMA )
@@ -118,9 +118,9 @@ struct AddOp : public BaseAddOp
     void op(const vector<Mat>& src, Mat& dst, const Mat& mask)
     {
         if( mask.empty() )
-            add(src[0], src[1], dst);
+            cv::add(src[0], src[1], dst);
         else
-            add(src[0], src[1], dst, mask);
+            cv::add(src[0], src[1], dst, mask);
     }
 };
 
@@ -144,9 +144,9 @@ struct AddSOp : public BaseAddOp
     void op(const vector<Mat>& src, Mat& dst, const Mat& mask)
     {
         if( mask.empty() )
-            add(src[0], gamma, dst);
+            cv::add(src[0], gamma, dst);
         else
-            add(src[0], gamma, dst, mask);
+            cv::add(src[0], gamma, dst, mask);
     }
 };
 

@@ -119,7 +119,7 @@ TEST(Core_LPSolver, regression_multiple_solutions){
     printf("scalar %g\n",z.dot(A));
     std::cout<<"here z goes\n"<<z<<"\n";
     ASSERT_EQ(res,1);
-    ASSERT_LT(fabs(z.dot(A) - 1), DBL_EPSILON);
+    ASSERT_LT(std::fabs(z.dot(A) - 1), DBL_EPSILON);
 #endif
 }
 
@@ -135,7 +135,7 @@ TEST(Core_LPSolver, regression_cycling){
     printf("res=%d\n",res);
     printf("scalar %g\n",z.dot(A));
     std::cout<<"here z goes\n"<<z<<"\n";
-    ASSERT_LT(fabs(z.dot(A) - 1), DBL_EPSILON);
+    ASSERT_LT(std::fabs(z.dot(A) - 1), DBL_EPSILON);
     //ASSERT_EQ(res,1);
 #endif
 }
