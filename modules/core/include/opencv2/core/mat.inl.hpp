@@ -1347,6 +1347,15 @@ Mat_<_Tp>& Mat_<_Tp>::operator = (const _Tp& s)
     return *this;
 }
 
+#ifdef __BORLANDC__
+template<> inline
+Mat_<Point2f>& Mat_<Point2f>::operator = (const Point2f& s)
+{
+    Mat::operator=(Scalar(s.x, s.y));
+    return *this;
+}
+#endif
+
 template<typename _Tp> inline
 void Mat_<_Tp>::create(int _rows, int _cols)
 {
