@@ -1953,18 +1953,18 @@ public:
         int kernelType = params.kernelType;
 
         String svm_type_str =
-            svmType == C_SVC ? "C_SVC" :
-            svmType == NU_SVC ? "NU_SVC" :
-            svmType == ONE_CLASS ? "ONE_CLASS" :
-            svmType == EPS_SVR ? "EPS_SVR" :
-            svmType == NU_SVR ? "NU_SVR" : format("Uknown_%d", svmType);
+            svmType == C_SVC ? String("C_SVC") :
+            svmType == NU_SVC ? String("NU_SVC") :
+            svmType == ONE_CLASS ? String("ONE_CLASS") :
+            svmType == EPS_SVR ? String("EPS_SVR") :
+            svmType == NU_SVR ? String("NU_SVR") : String(format("Uknown_%d", svmType));
         String kernel_type_str =
-            kernelType == LINEAR ? "LINEAR" :
-            kernelType == POLY ? "POLY" :
-            kernelType == RBF ? "RBF" :
-            kernelType == SIGMOID ? "SIGMOID" :
-            kernelType == CHI2 ? "CHI2" :
-            kernelType == INTER ? "INTER" : format("Unknown_%d", kernelType);
+            kernelType == LINEAR ? String("LINEAR") :
+            kernelType == POLY ? String("POLY") :
+            kernelType == RBF ? String("RBF") :
+            kernelType == SIGMOID ? String("SIGMOID") :
+            kernelType == CHI2 ? String("CHI2") :
+            kernelType == INTER ? String("INTER") : String(format("Unknown_%d", kernelType));
 
         fs << "svmType" << svm_type_str;
 

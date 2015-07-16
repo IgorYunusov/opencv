@@ -589,7 +589,11 @@ public:
             }
 
             Mat rotatedCenteredSample = covMatType != COV_MAT_GENERIC ?
+#ifdef __BORLANDC__
+                    centeredSample : static_cast<Mat>(centeredSample * covsRotateMats[clusterIndex]);
+#else
                     centeredSample : centeredSample * covsRotateMats[clusterIndex];
+#endif
 
             double Lval = 0;
             for(int di = 0; di < dim; di++)
