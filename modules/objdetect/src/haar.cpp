@@ -321,7 +321,7 @@ icvCreateHidHaarClassifierCascade( CvHaarClassifierCascade* cascade )
                 node->left = classifier->left[l];
                 node->right = classifier->right[l];
 
-                if( fabs(feature->rect[2].weight) < DBL_EPSILON ||
+                if( std::fabs(feature->rect[2].weight) < DBL_EPSILON ||
                     feature->rect[2].r.width == 0 ||
                     feature->rect[2].r.height == 0 )
                     memset( &(node->feature.rect[2]), 0, sizeof(node->feature.rect[2]) );
@@ -1726,7 +1726,7 @@ cvHaarDetectObjectsForROC( const CvArr* _img,
                 rectList.resize(allCandidates.size());
                 std::copy(allCandidates.begin(), allCandidates.end(), rectList.begin());
 
-                groupRectangles(rectList, std::max(minNeighbors, 1), GROUP_EPS);
+                cv::groupRectangles(rectList, std::max(minNeighbors, 1), GROUP_EPS);
 
                 if( !rectList.empty() )
                 {
@@ -1765,11 +1765,11 @@ cvHaarDetectObjectsForROC( const CvArr* _img,
     {
         if( outputRejectLevels )
         {
-            groupRectangles(rectList, rejectLevels, levelWeights, minNeighbors, GROUP_EPS );
+            cv::groupRectangles(rectList, rejectLevels, levelWeights, minNeighbors, GROUP_EPS );
         }
         else
         {
-            groupRectangles(rectList, rweights, std::max(minNeighbors, 1), GROUP_EPS);
+            cv::groupRectangles(rectList, rweights, std::max(minNeighbors, 1), GROUP_EPS);
         }
     }
     else

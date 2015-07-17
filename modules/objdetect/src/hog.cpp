@@ -3435,8 +3435,8 @@ void HOGDescriptor::detectMultiScaleROI(const cv::Mat& img,
 void HOGDescriptor::readALTModel(String modelfile)
 {
     // read model from SVMlight format..
-    FILE *modelfl;
-    if ((modelfl = fopen(modelfile.c_str(), "rb")) == NULL)
+    std::FILE *modelfl;
+    if ((modelfl = std::fopen(modelfile.c_str(), "rb")) == NULL)
     {
         String eerr("file not exist");
         String efile(__FILE__);
