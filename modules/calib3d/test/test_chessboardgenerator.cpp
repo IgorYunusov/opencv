@@ -132,7 +132,7 @@ Mat cv::ChessBoardGenerator::generateChessBoard(const Mat& bg, const Mat& camMat
                 squares_black.resize(squares_black.size() + 1);
                 vector<Point2f> temp;
                 approxPolyDP(Mat(pts_square2d), temp, 1.0, true);
-                transform(temp.begin(), temp.end(), back_inserter(squares_black.back()), Mult(rendererResolutionMultiplier));
+                std::transform(temp.begin(), temp.end(), back_inserter(squares_black.back()), Mult(rendererResolutionMultiplier));
             }
 
     /* calculate corners */
@@ -154,7 +154,7 @@ Mat cv::ChessBoardGenerator::generateChessBoard(const Mat& bg, const Mat& camMat
     approxPolyDP(Mat(whole2d), temp_whole2d, 1.0, true);
 
     vector< vector<Point > > whole_contour(1);
-    transform(temp_whole2d.begin(), temp_whole2d.end(),
+    std::transform(temp_whole2d.begin(), temp_whole2d.end(),
         back_inserter(whole_contour.front()), Mult(rendererResolutionMultiplier));
 
     Mat result;

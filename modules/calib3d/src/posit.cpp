@@ -173,12 +173,12 @@ static  CvStatus  icvPOSIT( CvPOSITObject *pObject, CvPoint2D32f *imagePoints,
                 old = imgVectors[i];
                 imgVectors[i] = imagePoints[i + 1].x * tmp - imagePoints[0].x;
 
-                diff = MAX( diff, (float) fabs( imgVectors[i] - old ));
+                diff = MAX( diff, (float) std::fabs( imgVectors[i] - old ));
 
                 old = imgVectors[N + i];
                 imgVectors[N + i] = imagePoints[i + 1].y * tmp - imagePoints[0].y;
 
-                diff = MAX( diff, (float) fabs( imgVectors[N + i] - old ));
+                diff = MAX( diff, (float) std::fabs( imgVectors[N + i] - old ));
             }
         }
 
@@ -205,8 +205,13 @@ static  CvStatus  icvPOSIT( CvPOSITObject *pObject, CvPoint2D32f *imagePoints,
                 rotation[4] /*[1][1]*/ * rotation[4] /*[1][1]*/ +
                 rotation[5] /*[1][2]*/ * rotation[5] /*[1][2]*/;
 
+#ifdef __BORLANDC__
+        const float invInorm = 1.0/std::sqrt( inorm);
+        const float invJnorm = 1.0/std::sqrt( jnorm );
+#else
         const float invInorm = cvInvSqrt( inorm );
         const float invJnorm = cvInvSqrt( jnorm );
+#endif
 
         inorm *= invInorm;
         jnorm *= invJnorm;

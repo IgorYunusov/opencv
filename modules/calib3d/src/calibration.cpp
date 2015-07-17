@@ -324,8 +324,8 @@ CV_IMPL int cvRodrigues2( const CvMat* src, CvMat* dst, CvMat* jacobian )
         {
             const double I[] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 
-            double c = cos(theta);
-            double s = sin(theta);
+            double c = std::cos(theta);
+            double s = std::sin(theta);
             double c1 = 1. - c;
             double itheta = theta ? 1./theta : 0.;
 
@@ -396,7 +396,7 @@ CV_IMPL int cvRodrigues2( const CvMat* src, CvMat* dst, CvMat* jacobian )
         s = std::sqrt((rx*rx + ry*ry + rz*rz)*0.25);
         c = (R[0] + R[4] + R[8] - 1)*0.5;
         c = c > 1. ? 1. : c < -1. ? -1. : c;
-        theta = acos(c);
+        theta = std::acos(c);
 
         if( s < 1e-5 )
         {
@@ -412,7 +412,7 @@ CV_IMPL int cvRodrigues2( const CvMat* src, CvMat* dst, CvMat* jacobian )
                 ry = std::sqrt(MAX(t,0.))*(R[1] < 0 ? -1. : 1.);
                 t = (R[8] + 1)*0.5;
                 rz = std::sqrt(MAX(t,0.))*(R[2] < 0 ? -1. : 1.);
-                if( fabs(rx) < fabs(ry) && fabs(rx) < fabs(rz) && (R[5] > 0) != (ry*rz > 0) )
+                if( std::fabs(rx) < std::fabs(ry) && std::fabs(rx) < std::fabs(rz) && (R[5] > 0) != (ry*rz > 0) )
                     rz = -rz;
                 theta /= std::sqrt(rx*rx + ry*ry + rz*rz);
                 rx *= theta;
@@ -1211,8 +1211,8 @@ CV_IMPL void cvInitIntrinsicParams2D( const CvMat* objectPoints,
     }
 
     cvSolve( matA, _b, &_f, CV_NORMAL + CV_SVD );
-    a[0] = std::sqrt(fabs(1./f[0]));
-    a[4] = std::sqrt(fabs(1./f[1]));
+    a[0] = std::sqrt(std::fabs(1./f[0]));
+    a[4] = std::sqrt(std::fabs(1./f[1]));
     if( aspectRatio != 0 )
     {
         double tf = (a[0] + a[4])/(aspectRatio + 1.);
@@ -1341,10 +1341,10 @@ CV_IMPL double cvCalibrateCamera2( const CvMat* objectPoints,
         if( A[2] < 0 || A[2] >= imageSize.width ||
             A[5] < 0 || A[5] >= imageSize.height )
             CV_Error( CV_StsOutOfRange, "Principal point must be within the image" );
-        if( fabs(A[1]) > 1e-5 )
+        if( std::fabs(A[1]) > 1e-5 )
             CV_Error( CV_StsOutOfRange, "Non-zero skew is not supported by the function" );
-        if( fabs(A[3]) > 1e-5 || fabs(A[6]) > 1e-5 ||
-            fabs(A[7]) > 1e-5 || fabs(A[8]-1) > 1e-5 )
+        if( std::fabs(A[3]) > 1e-5 || std::fabs(A[6]) > 1e-5 ||
+            std::fabs(A[7]) > 1e-5 || std::fabs(A[8]-1) > 1e-5 )
             CV_Error( CV_StsOutOfRange,
                 "The intrinsic matrix must have [fx 0 cx; 0 fy cy; 0 0 1] shape" );
         A[1] = A[3] = A[6] = A[7] = 0.;
@@ -1364,7 +1364,7 @@ CV_IMPL double cvCalibrateCamera2( const CvMat* objectPoints,
     {
         CvScalar mean, sdv;
         cvAvgSdv( matM, &mean, &sdv );
-        if( fabs(mean.val[2]) > 1e-5 || fabs(sdv.val[2]) > 1e-5 )
+        if( std::fabs(mean.val[2]) > 1e-5 || std::fabs(sdv.val[2]) > 1e-5 )
             CV_Error( CV_StsBadArg,
             "For non-planar calibration rigs the initial intrinsic matrix must be specified" );
         for( i = 0; i < total; i++ )
@@ -1604,10 +1604,10 @@ void cvCalibrationMatrixValues( const CvMat *calibMatr, CvSize imgSize,
     /* Calculate fovx and fovy. */
 
     if(fovx)
-        *fovx = 2 * atan(imgWidth / (2 * alphax)) * 180.0 / CV_PI;
+        *fovx = 2 * std::atan(imgWidth / (2 * alphax)) * 180.0 / CV_PI;
 
     if(fovy)
-        *fovy = 2 * atan(imgHeight / (2 * alphay)) * 180.0 / CV_PI;
+        *fovy = 2 * std::atan(imgHeight / (2 * alphay)) * 180.0 / CV_PI;
 
     /* Calculate focal length. */
 
@@ -2085,7 +2085,7 @@ double cvStereoCalibrate( const CvMat* _objectPoints, const CvMat* _imagePoints1
             cvGEMM( &iK, &E, 1, 0, 0, &E, CV_GEMM_A_T );
             cvInvert(&K[0], &iK);
             cvMatMul(&E, &iK, &F);
-            cvConvertScale( &F, matF, fabs(f[8]) > 0 ? 1./f[8] : 1 );
+            cvConvertScale( &F, matF, std::fabs(f[8]) > 0 ? 1./f[8] : 1 );
         }
     }
 
@@ -2168,7 +2168,7 @@ void cvStereoRectify( const CvMat* _cameraMatrix1, const CvMat* _cameraMatrix2,
     cvRodrigues2(&om, &r_r);        // rotate cameras to same orientation by averaging
     cvMatMul(&r_r, matT, &t);
 
-    int idx = fabs(_t[0]) > fabs(_t[1]) ? 0 : 1;
+    int idx = std::fabs(_t[0]) > std::fabs(_t[1]) ? 0 : 1;
     double c = _t[idx], nt = cvNorm(&t, 0, CV_L2);
     _uu[idx] = c > 0 ? 1 : -1;
 
@@ -2176,7 +2176,7 @@ void cvStereoRectify( const CvMat* _cameraMatrix1, const CvMat* _cameraMatrix2,
     cvCrossProduct(&t,&uu,&ww);
     double nw = cvNorm(&ww, 0, CV_L2);
     if (nw > 0.0)
-        cvConvertScale(&ww, &ww, acos(fabs(c)/nt)/nw);
+        cvConvertScale(&ww, &ww, std::acos(std::fabs(c)/nt)/nw);
     cvRodrigues2(&ww, &wR);
 
     // apply to both views
@@ -2495,10 +2495,10 @@ CV_IMPL int cvStereoRectifyUncalibrated(
         // measure distance from points to the corresponding epilines, mark outliers
         for( i = j = 0; i < npoints; i++ )
         {
-            if( fabs(m1[i].x*lines2[i].x +
+            if( std::fabs(m1[i].x*lines2[i].x +
                      m1[i].y*lines2[i].y +
                      lines2[i].z) <= threshold &&
-                fabs(m2[i].x*lines1[i].x +
+                std::fabs(m2[i].x*lines1[i].x +
                      m2[i].y*lines1[i].y +
                      lines1[i].z) <= threshold )
             {
@@ -2542,7 +2542,7 @@ CV_IMPL int cvStereoRectifyUncalibrated(
     CvMat R = cvMat(3, 3, CV_64F, r);
     cvMatMul( &R, &T, &T );
     cvMatMul( &R, &E2, &E2 );
-    double invf = fabs(e2[2]) < 1e-6*fabs(e2[0]) ? 0 : -e2[2]/e2[0];
+    double invf = std::fabs(e2[2]) < 1e-6*std::fabs(e2[0]) ? 0 : -e2[2]/e2[0];
     double k[] =
     {
         1, 0, 0,
@@ -2696,7 +2696,7 @@ void cv::reprojectImageTo3D( InputArray _disparity,
             double X = (qx + q[0][2]*d)*iW;
             double Y = (qy + q[1][2]*d)*iW;
             double Z = (qz + q[2][2]*d)*iW;
-            if( fabs(d-minDisparity) <= FLT_EPSILON )
+            if( std::fabs(d-minDisparity) <= FLT_EPSILON )
                 Z = bigZ;
 
             dptr[x*3] = (float)X;
@@ -2775,7 +2775,7 @@ cvRQDecomp3x3( const CvMat *matrixM, CvMat *matrixR, CvMat *matrixQ,
     CvMat Qx = cvMat(3, 3, CV_64F, _Qx);
 
     cvMatMul(&M, &Qx, &R);
-    assert(fabs(matR[2][1]) < FLT_EPSILON);
+    assert(std::fabs(matR[2][1]) < FLT_EPSILON);
     matR[2][1] = 0;
 
     /* Find Givens rotation for y axis. */
@@ -2794,7 +2794,7 @@ cvRQDecomp3x3( const CvMat *matrixM, CvMat *matrixR, CvMat *matrixQ,
     CvMat Qy = cvMat(3, 3, CV_64F, _Qy);
     cvMatMul(&R, &Qy, &M);
 
-    assert(fabs(matM[2][0]) < FLT_EPSILON);
+    assert(std::fabs(matM[2][0]) < FLT_EPSILON);
     matM[2][0] = 0;
 
     /* Find Givens rotation for z axis. */
@@ -2814,7 +2814,7 @@ cvRQDecomp3x3( const CvMat *matrixM, CvMat *matrixR, CvMat *matrixQ,
     CvMat Qz = cvMat(3, 3, CV_64F, _Qz);
 
     cvMatMul(&M, &Qz, &R);
-    assert(fabs(matR[1][0]) < FLT_EPSILON);
+    assert(std::fabs(matR[1][0]) < FLT_EPSILON);
     matR[1][0] = 0;
 
     // Solve the decomposition ambiguity.
@@ -2882,9 +2882,9 @@ cvRQDecomp3x3( const CvMat *matrixM, CvMat *matrixR, CvMat *matrixQ,
     // calculate the euler angle
     if( eulerAngles )
     {
-        eulerAngles->x = acos(_Qx[1][1]) * (_Qx[1][2] >= 0 ? 1 : -1) * (180.0 / CV_PI);
-        eulerAngles->y = acos(_Qy[0][0]) * (_Qy[2][0] >= 0 ? 1 : -1) * (180.0 / CV_PI);
-        eulerAngles->z = acos(_Qz[0][0]) * (_Qz[0][1] >= 0 ? 1 : -1) * (180.0 / CV_PI);
+        eulerAngles->x = std::acos(_Qx[1][1]) * (_Qx[1][2] >= 0 ? 1 : -1) * (180.0 / CV_PI);
+        eulerAngles->y = std::acos(_Qy[0][0]) * (_Qy[2][0] >= 0 ? 1 : -1) * (180.0 / CV_PI);
+        eulerAngles->z = std::acos(_Qz[0][0]) * (_Qz[0][1] >= 0 ? 1 : -1) * (180.0 / CV_PI);
     }
 
     /* Calulate orthogonal matrix. */
@@ -3586,7 +3586,7 @@ float cv::rectify3Collinear( InputArray _cameraMatrix1, InputArray _distCoeffs1,
     Rodrigues(om, r_r); // rotate cameras to same orientation by averaging
     Mat_<double> t12 = r_r * T12;
 
-    int idx = fabs(t12(0,0)) > fabs(t12(1,0)) ? 0 : 1;
+    int idx = std::fabs(t12(0,0)) > std::fabs(t12(1,0)) ? 0 : 1;
     double c = t12(idx,0), nt = norm(t12, CV_L2);
     Mat_<double> uu = Mat_<double>::zeros(3,1);
     uu(idx, 0) = c > 0 ? 1 : -1;
@@ -3594,7 +3594,7 @@ float cv::rectify3Collinear( InputArray _cameraMatrix1, InputArray _distCoeffs1,
     // calculate global Z rotation
     Mat_<double> ww = t12.cross(uu), wR;
     double nw = norm(ww, CV_L2);
-    ww *= acos(fabs(c)/nt)/nw;
+    ww *= std::acos(std::fabs(c)/nt)/nw;
     Rodrigues(ww, wR);
 
     // now rotate camera 3 to make its optical axis parallel to cameras 1 and 2.

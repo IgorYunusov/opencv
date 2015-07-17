@@ -138,7 +138,7 @@ public:
             double Sd = norm(rd, NORM_L2SQR);
             gemm(A, d, -1, v, 2, temp_d);
             double dS = d.dot(temp_d);
-            double R = (S - Sd)/(fabs(dS) > DBL_EPSILON ? dS : 1);
+            double R = (S - Sd)/(std::fabs(dS) > DBL_EPSILON ? dS : 1);
 
             if( R > Rhi )
             {
@@ -150,7 +150,7 @@ public:
             {
                 // find new nu if R too low
                 double t = d.dot(v);
-                double nu = (Sd - S)/(fabs(t) > DBL_EPSILON ? t : 1) + 2;
+                double nu = (Sd - S)/(std::fabs(t) > DBL_EPSILON ? t : 1) + 2;
                 nu = std::min(std::max(nu, 2.), 10.);
                 if( lambda == 0 )
                 {

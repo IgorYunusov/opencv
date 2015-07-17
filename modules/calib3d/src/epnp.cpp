@@ -541,10 +541,10 @@ void epnp::qr_solve(CvMat * A, CvMat * b, CvMat * X)
   double * pA = A->data.db, * ppAkk = pA;
   for(int k = 0; k < nc; k++)
   {
-    double * ppAik1 = ppAkk, eta = fabs(*ppAik1);
+    double * ppAik1 = ppAkk, eta = std::fabs(*ppAik1);
     for(int i = k + 1; i < nr; i++)
     {
-      double elt = fabs(*ppAik1);
+      double elt = std::fabs(*ppAik1);
       if (eta < elt) eta = elt;
       ppAik1 += nc;
     }

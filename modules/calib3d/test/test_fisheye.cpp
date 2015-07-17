@@ -323,7 +323,7 @@ TEST_F(fisheyeTest, Homography)
 
     cv::Vec2d std_err;
     cv::meanStdDev(merr.reshape(2), cv::noArray(), std_err);
-    std_err *= sqrt((double)merr.reshape(2).total() / (merr.reshape(2).total() - 1));
+    std_err *= std::sqrt((double)merr.reshape(2).total() / (merr.reshape(2).total() - 1));
 
     cv::Vec2d correct_std_err(0.00516740156010384, 0.00644205331553901);
     EXPECT_MAT_NEAR(std_err, correct_std_err, 1e-12);
@@ -381,7 +381,7 @@ TEST_F(fisheyeTest, EtimateUncertainties)
     EXPECT_MAT_NEAR(errors.c, cv::Vec2d(0.890439368129246, 0.816096854937896), 1e-10);
     EXPECT_MAT_NEAR(errors.k, cv::Vec4d(0.00516248605191506, 0.0168181467500934, 0.0213118690274604, 0.00916010877545648), 1e-10);
     EXPECT_MAT_NEAR(err_std, cv::Vec2d(0.187475975266883, 0.185678953263995), 1e-10);
-    CV_Assert(fabs(rms - 0.263782587133546) < 1e-10);
+    CV_Assert(std::fabs(rms - 0.263782587133546) < 1e-10);
     CV_Assert(errors.alpha == 0);
 }
 

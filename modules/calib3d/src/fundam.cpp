@@ -62,7 +62,7 @@ static bool haveCollinearPoints( const Mat& m, int count )
         {
             double dx2 = ptr[k].x - ptr[i].x;
             double dy2 = ptr[k].y - ptr[i].y;
-            if( fabs(dx2*dy1 - dy2*dx1) <= FLT_EPSILON*(fabs(dx1) + fabs(dy1) + fabs(dx2) + fabs(dy2)))
+            if( std::fabs(dx2*dy1 - dy2*dx1) <= FLT_EPSILON*(std::fabs(dx1) + std::fabs(dy1) + std::fabs(dx2) + std::fabs(dy2)))
                 return true;
         }
     }
@@ -138,14 +138,14 @@ public:
 
         for( i = 0; i < count; i++ )
         {
-            sm.x += fabs(m[i].x - cm.x);
-            sm.y += fabs(m[i].y - cm.y);
-            sM.x += fabs(M[i].x - cM.x);
-            sM.y += fabs(M[i].y - cM.y);
+            sm.x += std::fabs(m[i].x - cm.x);
+            sm.y += std::fabs(m[i].y - cm.y);
+            sM.x += std::fabs(M[i].x - cM.x);
+            sM.y += std::fabs(M[i].y - cM.y);
         }
 
-        if( fabs(sm.x) < DBL_EPSILON || fabs(sm.y) < DBL_EPSILON ||
-            fabs(sM.x) < DBL_EPSILON || fabs(sM.y) < DBL_EPSILON )
+        if( std::fabs(sm.x) < DBL_EPSILON || std::fabs(sm.y) < DBL_EPSILON ||
+            std::fabs(sM.x) < DBL_EPSILON || std::fabs(sM.y) < DBL_EPSILON )
             return 0;
         sm.x = count/sm.x; sm.y = count/sm.y;
         sM.x = count/sM.x; sM.y = count/sM.y;
@@ -232,7 +232,7 @@ public:
         {
             double Mx = M[i].x, My = M[i].y;
             double ww = h[6]*Mx + h[7]*My + 1.;
-            ww = fabs(ww) > DBL_EPSILON ? 1./ww : 0;
+            ww = std::fabs(ww) > DBL_EPSILON ? 1./ww : 0;
             double xi = (h[0]*Mx + h[1]*My + h[2])*ww;
             double yi = (h[3]*Mx + h[4]*My + h[5])*ww;
             errptr[i*2] = xi - m[i].x;
@@ -528,7 +528,7 @@ static int run7Point( const Mat& _m1, const Mat& _m2, Mat& _fmatrix )
         double s = f1[8]*r[k] + f2[8];
 
         // normalize each matrix, so that F(3,3) (~fmatrix[8]) == 1
-        if( fabs(s) > DBL_EPSILON )
+        if( std::fabs(s) > DBL_EPSILON )
         {
             mu = 1./s;
             lambda *= mu;
@@ -618,7 +618,7 @@ static int run8Point( const Mat& _m1, const Mat& _m2, Mat& _fmatrix )
 
     for( i = 0; i < 9; i++ )
     {
-        if( fabs(w[i]) < DBL_EPSILON )
+        if( std::fabs(w[i]) < DBL_EPSILON )
             break;
     }
 
@@ -656,7 +656,7 @@ static int run8Point( const Mat& _m1, const Mat& _m2, Mat& _fmatrix )
     gemm( TF, T1, 1., 0, 0., F0, 0 );
 
     // make F(3,3) = 1
-    if( fabs(F0.at<double>(2,2)) > FLT_EPSILON )
+    if( std::fabs(F0.at<double>(2,2)) > FLT_EPSILON )
         F0 *= 1./F0.at<double>(2,2);
 
     return 1;

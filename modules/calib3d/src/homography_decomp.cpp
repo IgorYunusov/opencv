@@ -134,7 +134,7 @@ bool HomographyDecomp::isRotationValid(const Matx33d& R, const double epsilon)
     Matx33d I(1,0,0, 0,1,0, 0,0,1);
     if (norm(RtR, I, NORM_INF) > epsilon)
         return false;
-    return (fabs(determinant(R) - 1.0) < epsilon);
+    return (std::fabs(determinant(R) - 1.0) < epsilon);
 }
 
 bool HomographyDecomp::passesSameSideOfPlaneConstraint(CameraMotion& motion)

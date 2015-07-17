@@ -102,23 +102,23 @@ int p3p::solve(double R[4][3][3], double t[4][3],
 
     mu0 = inv_fx * mu0 - cx_fx;
     mv0 = inv_fy * mv0 - cy_fy;
-    norm = sqrt(mu0 * mu0 + mv0 * mv0 + 1);
+    norm = std::sqrt(mu0 * mu0 + mv0 * mv0 + 1);
     mk0 = 1. / norm; mu0 *= mk0; mv0 *= mk0;
 
     mu1 = inv_fx * mu1 - cx_fx;
     mv1 = inv_fy * mv1 - cy_fy;
-    norm = sqrt(mu1 * mu1 + mv1 * mv1 + 1);
+    norm = std::sqrt(mu1 * mu1 + mv1 * mv1 + 1);
     mk1 = 1. / norm; mu1 *= mk1; mv1 *= mk1;
 
     mu2 = inv_fx * mu2 - cx_fx;
     mv2 = inv_fy * mv2 - cy_fy;
-    norm = sqrt(mu2 * mu2 + mv2 * mv2 + 1);
+    norm = std::sqrt(mu2 * mu2 + mv2 * mv2 + 1);
     mk2 = 1. / norm; mu2 *= mk2; mv2 *= mk2;
 
     double distances[3];
-    distances[0] = sqrt( (X1 - X2) * (X1 - X2) + (Y1 - Y2) * (Y1 - Y2) + (Z1 - Z2) * (Z1 - Z2) );
-    distances[1] = sqrt( (X0 - X2) * (X0 - X2) + (Y0 - Y2) * (Y0 - Y2) + (Z0 - Z2) * (Z0 - Z2) );
-    distances[2] = sqrt( (X0 - X1) * (X0 - X1) + (Y0 - Y1) * (Y0 - Y1) + (Z0 - Z1) * (Z0 - Z1) );
+    distances[0] = std::sqrt( (X1 - X2) * (X1 - X2) + (Y1 - Y2) * (Y1 - Y2) + (Z1 - Z2) * (Z1 - Z2) );
+    distances[1] = std::sqrt( (X0 - X2) * (X0 - X2) + (Y0 - Y2) * (Y0 - Y2) + (Z0 - Z2) * (Z0 - Z2) );
+    distances[2] = std::sqrt( (X0 - X1) * (X0 - X1) + (Y0 - Y1) * (Y0 - Y1) + (Z0 - Z1) * (Z0 - Z1) );
 
     // Calculate angles
     double cosines[3];
@@ -244,7 +244,7 @@ int p3p::solve_for_lengths(double lengths[4][3], double distances[3], double cos
         if (v <= 0)
             continue;
 
-        double Z = distances[2] / sqrt(v);
+        double Z = distances[2] / std::sqrt(v);
         double X = x * Z;
         double Y = y * Z;
 
@@ -345,7 +345,7 @@ bool p3p::jacobi_4x4(double * A, double * D, double * U)
     memset(Z, 0, 4 * sizeof(double));
 
     for(int iter = 0; iter < 50; iter++) {
-        double sum = fabs(A[1]) + fabs(A[2]) + fabs(A[3]) + fabs(A[6]) + fabs(A[7]) + fabs(A[11]);
+        double sum = std::fabs(A[1]) + std::fabs(A[2]) + std::fabs(A[3]) + std::fabs(A[6]) + std::fabs(A[7]) + std::fabs(A[11]);
 
         if (sum == 0.0)
             return true;
@@ -355,17 +355,17 @@ bool p3p::jacobi_4x4(double * A, double * D, double * U)
             double * pAij = A + 5 * i + 1;
             for(int j = i + 1 ; j < 4; j++) {
                 double Aij = *pAij;
-                double eps_machine = 100.0 * fabs(Aij);
+                double eps_machine = 100.0 * std::fabs(Aij);
 
-                if ( iter > 3 && fabs(D[i]) + eps_machine == fabs(D[i]) && fabs(D[j]) + eps_machine == fabs(D[j]) )
+                if ( iter > 3 && std::fabs(D[i]) + eps_machine == std::fabs(D[i]) && std::fabs(D[j]) + eps_machine == std::fabs(D[j]) )
                     *pAij = 0.0;
-                else if (fabs(Aij) > tresh) {
+                else if (std::fabs(Aij) > tresh) {
                     double hh = D[j] - D[i], t;
-                    if (fabs(hh) + eps_machine == fabs(hh))
+                    if (std::fabs(hh) + eps_machine == std::fabs(hh))
                         t = Aij / hh;
                     else {
                         double theta = 0.5 * hh / Aij;
-                        t = 1.0 / (fabs(theta) + sqrt(1.0 + theta * theta));
+                        t = 1.0 / (std::fabs(theta) + std::sqrt(1.0 + theta * theta));
                         if (theta < 0.0) t = -t;
                     }
 
@@ -376,7 +376,7 @@ bool p3p::jacobi_4x4(double * A, double * D, double * U)
                     D[j] += hh;
                     *pAij = 0.0;
 
-                    double c = 1.0 / sqrt(1 + t * t);
+                    double c = 1.0 / std::sqrt(1 + t * t);
                     double s = t * c;
                     double tau = s / (1.0 + c);
                     for(int k = 0; k <= i - 1; k++) {

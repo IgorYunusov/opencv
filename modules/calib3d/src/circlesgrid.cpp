@@ -243,7 +243,7 @@ void CirclesGridClusterFinder::findOutsideCorners(const std::vector<cv::Point2f>
   {
     for(j = i + 1; j < n; j++)
     {
-      float val = fabs(tangentVectors[i].dot(tangentVectors[j]));
+      float val = std::fabs(tangentVectors[i].dot(tangentVectors[j]));
       cosAngles.at<float>(i, j) = val;
       cosAngles.at<float>(j, i) = val;
     }
@@ -699,9 +699,9 @@ bool CirclesGridFinder::isDetectionCorrect()
       }
 
       size_t largeWidth = patternSize.width;
-      size_t largeHeight = (size_t)ceil(patternSize.height / 2.);
+      size_t largeHeight = (size_t)std::ceil(patternSize.height / 2.);
       size_t smallWidth = patternSize.width;
-      size_t smallHeight = (size_t)floor(patternSize.height / 2.);
+      size_t smallHeight = (size_t)std::floor(patternSize.height / 2.);
 
       size_t sw = smallWidth, sh = smallHeight, lw = largeWidth, lh = largeHeight;
       if (largeHoles->size() != largeHeight)
@@ -1099,7 +1099,7 @@ void CirclesGridFinder::findBasis(const std::vector<Point2f> &samples, std::vect
   //TODO: only remove duplicate
   for (int i = 0; i < clustersCount; i++)
   {
-    int maxIdx = (fabs(centers.at<float> (i, 0)) < fabs(centers.at<float> (i, 1)));
+    int maxIdx = (std::fabs(centers.at<float> (i, 0)) < std::fabs(centers.at<float> (i, 1)));
     if (centers.at<float> (i, maxIdx) > 0)
     {
       Point2f vec(centers.at<float> (i, 0), centers.at<float> (i, 1));

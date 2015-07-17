@@ -110,7 +110,7 @@ public:
         double* e = ematrix.ptr<double>();
         for (size_t i = 0; i < roots.size(); i++)
         {
-            if (fabs(roots[i].im) > 1e-10) continue;
+            if (std::fabs(roots[i].im) > 1e-10) continue;
             double z1 = roots[i].re;
             double z2 = z1 * z1;
             double z3 = z2 * z1;
@@ -129,7 +129,7 @@ public:
             cv::Mat xy1;
             SVD::solveZ(Bz, xy1);
 
-            if (fabs(xy1.at<double>(2)) < 1e-10) continue;
+            if (std::fabs(xy1.at<double>(2)) < 1e-10) continue;
             xs.push_back(xy1.at<double>(0) / xy1.at<double>(2));
             ys.push_back(xy1.at<double>(1) / xy1.at<double>(2));
             zs.push_back(z1);

@@ -262,8 +262,8 @@ bool CvLevMarq::updateAlt( const CvMat*& _param, CvMat*& _JtJ, CvMat*& _JtErr, d
 
 void CvLevMarq::step()
 {
-    const double LOG10 = log(10.);
-    double lambda = exp(lambdaLg10*LOG10);
+    const double LOG10 = std::log(10.);
+    double lambda = std::exp(lambdaLg10*LOG10);
     int i, j, nparams = param->rows;
 
     for( i = 0; i < nparams; i++ )

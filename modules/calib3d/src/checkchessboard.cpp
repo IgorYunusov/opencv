@@ -184,8 +184,8 @@ int cvCheckChessboard(IplImage* src, CvSize size)
                 // check the number of black and white squares
                 std::vector<int> counts;
                 countClasses(quads, i, j, counts);
-                const int black_count = cvRound(ceil(size.width/2.0)*ceil(size.height/2.0));
-                const int white_count = cvRound(floor(size.width/2.0)*floor(size.height/2.0));
+                const int black_count = cvRound(std::ceil(size.width/2.0)*std::ceil(size.height/2.0));
+                const int white_count = cvRound(std::floor(size.width/2.0)*std::floor(size.height/2.0));
                 if(counts[0] < black_count*0.75 ||
                    counts[1] < white_count*0.75)
                 {

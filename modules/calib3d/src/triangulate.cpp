@@ -275,7 +275,7 @@ cvCorrectMatches(CvMat *F_, CvMat *points1_, CvMat *points2_, CvMat *new_points1
         cvSetZero(S);
         cvSetZero(V);
         cvSVD(TFT,S,U,V);
-        scale = sqrt(cvGetReal2D(V,0,2)*cvGetReal2D(V,0,2) + cvGetReal2D(V,1,2)*cvGetReal2D(V,1,2));
+        scale = std::sqrt(cvGetReal2D(V,0,2)*cvGetReal2D(V,0,2) + cvGetReal2D(V,1,2)*cvGetReal2D(V,1,2));
         cvSetReal2D(e1,0,0,cvGetReal2D(V,0,2)/scale);
         cvSetReal2D(e1,1,0,cvGetReal2D(V,1,2)/scale);
         cvSetReal2D(e1,2,0,cvGetReal2D(V,2,2)/scale);
@@ -293,7 +293,7 @@ cvCorrectMatches(CvMat *F_, CvMat *points1_, CvMat *points2_, CvMat *new_points1
         cvSetZero(V);
         cvSVD(TFTt,S,U,V);
         cvSetZero(e2);
-        scale = sqrt(cvGetReal2D(V,0,2)*cvGetReal2D(V,0,2) + cvGetReal2D(V,1,2)*cvGetReal2D(V,1,2));
+        scale = std::sqrt(cvGetReal2D(V,0,2)*cvGetReal2D(V,0,2) + cvGetReal2D(V,1,2)*cvGetReal2D(V,1,2));
         cvSetReal2D(e2,0,0,cvGetReal2D(V,0,2)/scale);
         cvSetReal2D(e2,1,0,cvGetReal2D(V,1,2)/scale);
         cvSetReal2D(e2,2,0,cvGetReal2D(V,2,2)/scale);
@@ -365,9 +365,9 @@ cvCorrectMatches(CvMat *F_, CvMat *points1_, CvMat *points2_, CvMat *new_points1
         x1 = tmp31_2->data.db[0];
         y1 = tmp31_2->data.db[1];
 
-        tmp31->data.db[0] = f2*pow(c*t_min+d,2);
+        tmp31->data.db[0] = f2*std::pow(c*t_min+d,2);
         tmp31->data.db[1] = -(a*t_min+b)*(c*t_min+d);
-        tmp31->data.db[2] = f2*f2*pow(c*t_min+d,2) + pow(a*t_min+b,2);
+        tmp31->data.db[2] = f2*f2*std::pow(c*t_min+d,2) + std::pow(a*t_min+b,2);
         tmp31->data.db[0] /= tmp31->data.db[2];
         tmp31->data.db[1] /= tmp31->data.db[2];
         tmp31->data.db[2] /= tmp31->data.db[2];

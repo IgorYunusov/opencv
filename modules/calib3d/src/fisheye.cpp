@@ -128,7 +128,7 @@ void cv::fisheye::projectPoints(InputArray objectPoints, OutputArray imagePoints
         double r = std::sqrt(r2);
 
         // Angle of the incoming ray:
-        double theta = atan(r);
+        double theta = std::atan(r);
 
         double theta2 = theta*theta, theta3 = theta2*theta, theta4 = theta2*theta2, theta5 = theta4*theta,
                 theta6 = theta3*theta3, theta7 = theta6*theta, theta8 = theta4*theta4, theta9 = theta8*theta;
@@ -285,7 +285,7 @@ void cv::fisheye::distortPoints(InputArray undistorted, OutputArray distorted, I
         double r = std::sqrt(r2);
 
         // Angle of the incoming ray:
-        double theta = atan(r);
+        double theta = std::atan(r);
 
         double theta2 = theta*theta, theta3 = theta2*theta, theta4 = theta2*theta2, theta5 = theta4*theta,
                 theta6 = theta3*theta3, theta7 = theta6*theta, theta8 = theta4*theta4, theta9 = theta8*theta;
@@ -461,7 +461,7 @@ void cv::fisheye::initUndistortRectifyMap( InputArray K, InputArray D, InputArra
             double x = _x/_w, y = _y/_w;
 
             double r = sqrt(x*x + y*y);
-            double theta = atan(r);
+            double theta = std::atan(r);
 
             double theta2 = theta*theta, theta4 = theta2*theta2, theta6 = theta4*theta2, theta8 = theta4*theta4;
             double theta_d = theta * (1 + k[0]*theta2 + k[1]*theta4 + k[2]*theta6 + k[3]*theta8);
@@ -641,7 +641,7 @@ void cv::fisheye::stereoRectify( InputArray K1, InputArray D1, InputArray K2, In
     Vec3d ww = t.cross(uu);
     double nw = norm(ww);
     if (nw > 0.0)
-        ww *= acos(fabs(t[0])/cv::norm(t))/nw;
+        ww *= std::acos(std::fabs(t[0])/cv::norm(t))/nw;
 
     Matx33d wr;
     Rodrigues(ww, wr);
@@ -985,9 +985,9 @@ double cv::fisheye::stereoCalibrate(InputArrayOfArrays objectPoints, InputArrayO
             double abs_max  = 0;
             for (int i = 0; i < 4 * n_points; i++)
             {
-                if (fabs(ekk.at<double>(i)) > abs_max)
+                if (std::fabs(ekk.at<double>(i)) > abs_max)
                 {
-                    abs_max = fabs(ekk.at<double>(i));
+                    abs_max = std::fabs(ekk.at<double>(i));
                 }
             }
 
@@ -1444,8 +1444,8 @@ void cv::internal::ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayO
     std::vector<int> idxs(param.isEstimate);
     idxs.insert(idxs.end(), 6 * n, 1);
 
-    subMatrix(JJ3, JJ3, idxs, idxs);
-    subMatrix(ex3, ex3, std::vector<int>(1, 1), idxs);
+    cv::subMatrix(JJ3, JJ3, idxs, idxs);
+    cv::subMatrix(ex3, ex3, std::vector<int>(1, 1), idxs);
     JJ2_inv = JJ3.inv();
 }
 

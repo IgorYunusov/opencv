@@ -124,7 +124,7 @@ struct CvCBCorner
             {
                 float dx = neighbors[i]->pt.x - pt.x;
                 float dy = neighbors[i]->pt.y - pt.y;
-                sum += sqrt(dx*dx + dy*dy);
+                sum += std::sqrt(dx*dx + dy*dy);
                 n++;
             }
         }
@@ -592,7 +592,7 @@ icvCheckBoardMonotony( CvPoint2D32f* corners, CvSize pattern_size )
             CvPoint2D32f b = k == 0 ? corners[(i+1)*pattern_size.width-1] :
                 corners[(pattern_size.height-1)*pattern_size.width + i];
             float prevt = 0, dx0 = b.x - a.x, dy0 = b.y - a.y;
-            if( fabs(dx0) + fabs(dy0) < FLT_EPSILON )
+            if( std::fabs(dx0) + std::fabs(dy0) < FLT_EPSILON )
                 return 0;
             for( j = 1; j < (k == 0 ? pattern_size.width : pattern_size.height) - 1; j++ )
             {
@@ -1153,7 +1153,7 @@ icvCleanFoundConnectedQuads( int quad_count, CvCBQuad **quad_group, CvSize patte
             CvMat pointMat = cvMat(1, quad_count, CV_32FC2, centers);
             CvSeq *hull = cvConvexHull2( &pointMat, temp_storage, CV_CLOCKWISE, 1 );
             centers[skip] = temp;
-            double hull_area = fabs(cvContourArea(hull, CV_WHOLE_SEQ));
+            double hull_area = std::fabs(cvContourArea(hull, CV_WHOLE_SEQ));
 
             // remember smallest box area
             if( hull_area < min_box_area )
@@ -1711,7 +1711,7 @@ icvGenerateQuads( CvCBQuad **out_quads, CvCBCorner **out_corners,
             {
                 CvPoint pt[4];
                 double d1, d2, p = cvContourPerimeter(dst_contour);
-                double area = fabs(cvContourArea(dst_contour, CV_WHOLE_SEQ));
+                double area = std::fabs(cvContourArea(dst_contour, CV_WHOLE_SEQ));
                 double dx, dy;
 
                 for( i = 0; i < 4; i++ )
@@ -1719,21 +1719,21 @@ icvGenerateQuads( CvCBQuad **out_quads, CvCBCorner **out_corners,
 
                 dx = pt[0].x - pt[2].x;
                 dy = pt[0].y - pt[2].y;
-                d1 = sqrt(dx*dx + dy*dy);
+                d1 = std::sqrt(dx*dx + dy*dy);
 
                 dx = pt[1].x - pt[3].x;
                 dy = pt[1].y - pt[3].y;
-                d2 = sqrt(dx*dx + dy*dy);
+                d2 = std::sqrt(dx*dx + dy*dy);
 
                 // philipg.  Only accept those quadrangles which are more square
                 // than rectangular and which are big enough
                 double d3, d4;
                 dx = pt[0].x - pt[1].x;
                 dy = pt[0].y - pt[1].y;
-                d3 = sqrt(dx*dx + dy*dy);
+                d3 = std::sqrt(dx*dx + dy*dy);
                 dx = pt[1].x - pt[2].x;
                 dy = pt[1].y - pt[2].y;
-                d4 = sqrt(dx*dx + dy*dy);
+                d4 = std::sqrt(dx*dx + dy*dy);
                 if( !(flags & CV_CALIB_CB_FILTER_QUADS) ||
                     (d3*4 > d4 && d4*4 > d3 && d3*d4 < area*1.5 && area > min_size &&
                     d1 >= 0.15 * p && d2 >= 0.15 * p) )

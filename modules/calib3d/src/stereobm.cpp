@@ -206,11 +206,11 @@ prefilterXSobel( const Mat& src, Mat& dst, int ftzero )
     for( y = 0; y < size.height-1; y += 2 )
     {
         const uchar* srow1 = src.ptr<uchar>(y);
-        const uchar* srow0 = y > 0 ? srow1 - src.step : size.height > 1 ? srow1 + src.step : srow1;
-        const uchar* srow2 = y < size.height-1 ? srow1 + src.step : size.height > 1 ? srow1 - src.step : srow1;
-        const uchar* srow3 = y < size.height-2 ? srow1 + src.step*2 : srow1;
+        const uchar* srow0 = y > 0 ? srow1 - (size_t)src.step : size.height > 1 ? srow1 + (size_t)src.step : srow1;
+        const uchar* srow2 = y < size.height-1 ? srow1 + (size_t)src.step : size.height > 1 ? srow1 - (size_t)src.step : srow1;
+        const uchar* srow3 = y < size.height-2 ? srow1 + (size_t)src.step*2 : srow1;
         uchar* dptr0 = dst.ptr<uchar>(y);
-        uchar* dptr1 = dptr0 + dst.step;
+        uchar* dptr1 = dptr0 + (size_t)dst.step;
 
         dptr0[0] = dptr0[size.width-1] = dptr1[0] = dptr1[size.width-1] = val0;
         x = 1;
