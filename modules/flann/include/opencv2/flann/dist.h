@@ -58,13 +58,25 @@ template<typename T>
 inline T abs(T x) { return (x<0) ? -x : x; }
 
 template<>
+#ifdef __BORLANDC__
+inline int abs<int>(int x) { return std::abs(x); }
+#else
 inline int abs<int>(int x) { return ::abs(x); }
+#endif
 
 template<>
+#ifdef __BORLANDC__
+inline float abs<float>(float x) { return std::abs(x); }
+#else
 inline float abs<float>(float x) { return fabsf(x); }
+#endif
 
 template<>
+#ifdef __BORLANDC__
+inline double abs<double>(double x) { return std::abs(x); }
+#else
 inline double abs<double>(double x) { return fabs(x); }
+#endif
 
 template<typename T>
 struct Accumulator { typedef T Type; };

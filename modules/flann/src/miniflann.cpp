@@ -18,7 +18,7 @@ namespace cv
 namespace flann
 {
 
-using namespace cvflann;
+// using namespace cvflann;
 
 IndexParams::IndexParams()
 {
@@ -199,21 +199,21 @@ void IndexParams::getAll(std::vector<String>& names,
 KDTreeIndexParams::KDTreeIndexParams(int trees)
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_KDTREE;
+    p["algorithm"] = cvflann::FLANN_INDEX_KDTREE;
     p["trees"] = trees;
 }
 
 LinearIndexParams::LinearIndexParams()
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_LINEAR;
+    p["algorithm"] = cvflann::FLANN_INDEX_LINEAR;
 }
 
 CompositeIndexParams::CompositeIndexParams(int trees, int branching, int iterations,
-                             flann_centers_init_t centers_init, float cb_index )
+                             cvflann::flann_centers_init_t centers_init, float cb_index )
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_KMEANS;
+    p["algorithm"] = cvflann::FLANN_INDEX_KMEANS;
     // number of randomized trees to use (for kdtree)
     p["trees"] = trees;
     // branching factor
@@ -230,7 +230,7 @@ AutotunedIndexParams::AutotunedIndexParams(float target_precision, float build_w
                                            float memory_weight, float sample_fraction)
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_AUTOTUNED;
+    p["algorithm"] = cvflann::FLANN_INDEX_AUTOTUNED;
     // precision desired (used for autotuning, -1 otherwise)
     p["target_precision"] = target_precision;
     // build tree time weighting factor
@@ -243,10 +243,10 @@ AutotunedIndexParams::AutotunedIndexParams(float target_precision, float build_w
 
 
 KMeansIndexParams::KMeansIndexParams(int branching, int iterations,
-                  flann_centers_init_t centers_init, float cb_index )
+                  cvflann::flann_centers_init_t centers_init, float cb_index )
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_KMEANS;
+    p["algorithm"] = cvflann::FLANN_INDEX_KMEANS;
     // branching factor
     p["branching"] = branching;
     // max iterations to perform in one kmeans clustering (kmeans tree)
@@ -258,11 +258,11 @@ KMeansIndexParams::KMeansIndexParams(int branching, int iterations,
 }
 
 HierarchicalClusteringIndexParams::HierarchicalClusteringIndexParams(int branching ,
-                                      flann_centers_init_t centers_init,
+                                      cvflann::flann_centers_init_t centers_init,
                                       int trees, int leaf_size)
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_HIERARCHICAL;
+    p["algorithm"] = cvflann::FLANN_INDEX_HIERARCHICAL;
     // The branching factor used in the hierarchical clustering
     p["branching"] = branching;
     // Algorithm used for picking the initial cluster centers
@@ -276,7 +276,7 @@ HierarchicalClusteringIndexParams::HierarchicalClusteringIndexParams(int branchi
 LshIndexParams::LshIndexParams(int table_number, int key_size, int multi_probe_level)
 {
     ::cvflann::IndexParams& p = get_params(*this);
-    p["algorithm"] = FLANN_INDEX_LSH;
+    p["algorithm"] = cvflann::FLANN_INDEX_LSH;
     // The number of hash tables to use
     p["table_number"] = table_number;
     // The length of the key in the hash tables
@@ -290,7 +290,7 @@ SavedIndexParams::SavedIndexParams(const String& _filename)
     String filename = _filename;
     ::cvflann::IndexParams& p = get_params(*this);
 
-    p["algorithm"] = FLANN_INDEX_SAVED;
+    p["algorithm"] = cvflann::FLANN_INDEX_SAVED;
     p["filename"] = filename;
 }
 
@@ -338,21 +338,22 @@ Index::Index()
 {
     index = 0;
     featureType = CV_32F;
-    algo = FLANN_INDEX_LINEAR;
-    distType = FLANN_DIST_L2;
+    algo = cvflann::FLANN_INDEX_LINEAR;
+    distType = cvflann::FLANN_DIST_L2;
 }
 
-Index::Index(InputArray _data, const IndexParams& params, flann_distance_t _distType)
+Index::Index(InputArray _data, const IndexParams& params, cvflann::flann_distance_t _distType)
 {
     index = 0;
     featureType = CV_32F;
-    algo = FLANN_INDEX_LINEAR;
-    distType = FLANN_DIST_L2;
+    algo = cvflann::FLANN_INDEX_LINEAR;
+    distType = cvflann::FLANN_DIST_L2;
     build(_data, params, _distType);
 }
 
-void Index::build(InputArray _data, const IndexParams& params, flann_distance_t _distType)
+void Index::build(InputArray _data, const IndexParams& params, cvflann::flann_distance_t _distType)
 {
+    using namespace cvflann;
     release();
     algo = getParam<flann_algorithm_t>(params, "algorithm", FLANN_INDEX_LINEAR);
     if( algo == FLANN_INDEX_SAVED )
@@ -374,29 +375,29 @@ void Index::build(InputArray _data, const IndexParams& params, flann_distance_t 
     switch( distType )
     {
     case FLANN_DIST_HAMMING:
-        buildIndex< HammingDistance >(index, data, params);
+        cv::flann::buildIndex< HammingDistance >(index, data, params);
         break;
     case FLANN_DIST_L2:
-        buildIndex< ::cvflann::L2<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::L2<float> >(index, data, params);
         break;
     case FLANN_DIST_L1:
-        buildIndex< ::cvflann::L1<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::L1<float> >(index, data, params);
         break;
 #if MINIFLANN_SUPPORT_EXOTIC_DISTANCE_TYPES
     case FLANN_DIST_MAX:
-        buildIndex< ::cvflann::MaxDistance<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::MaxDistance<float> >(index, data, params);
         break;
     case FLANN_DIST_HIST_INTERSECT:
-        buildIndex< ::cvflann::HistIntersectionDistance<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::HistIntersectionDistance<float> >(index, data, params);
         break;
     case FLANN_DIST_HELLINGER:
-        buildIndex< ::cvflann::HellingerDistance<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::HellingerDistance<float> >(index, data, params);
         break;
     case FLANN_DIST_CHI_SQUARE:
-        buildIndex< ::cvflann::ChiSquareDistance<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::ChiSquareDistance<float> >(index, data, params);
         break;
     case FLANN_DIST_KL:
-        buildIndex< ::cvflann::KL_Divergence<float> >(index, data, params);
+        cv::flann::buildIndex< ::cvflann::KL_Divergence<float> >(index, data, params);
         break;
 #endif
     default:
@@ -421,6 +422,7 @@ Index::~Index()
 
 void Index::release()
 {
+    using namespace cvflann;
     if( !index )
         return;
 
@@ -551,6 +553,7 @@ static void createIndicesDists(OutputArray _indices, OutputArray _dists,
 void Index::knnSearch(InputArray _query, OutputArray _indices,
                OutputArray _dists, int knn, const SearchParams& params)
 {
+    using namespace cvflann;
     Mat query = _query.getMat(), indices, dists;
     int dtype = distType == FLANN_DIST_HAMMING ? CV_32S : CV_32F;
 
@@ -593,6 +596,7 @@ int Index::radiusSearch(InputArray _query, OutputArray _indices,
                         OutputArray _dists, double radius, int maxResults,
                         const SearchParams& params)
 {
+    using namespace cvflann;
     Mat query = _query.getMat(), indices, dists;
     int dtype = distType == FLANN_DIST_HAMMING ? CV_32S : CV_32F;
     CV_Assert( maxResults > 0 );
@@ -628,12 +632,12 @@ int Index::radiusSearch(InputArray _query, OutputArray _indices,
     return -1;
 }
 
-flann_distance_t Index::getDistance() const
+cvflann::flann_distance_t Index::getDistance() const
 {
     return distType;
 }
 
-flann_algorithm_t Index::getAlgorithm() const
+cvflann::flann_algorithm_t Index::getAlgorithm() const
 {
     return algo;
 }
@@ -656,6 +660,7 @@ template<typename Distance> void saveIndex(const Index* index0, const void* inde
 
 void Index::save(const String& filename) const
 {
+    using namespace cvflann;
     FILE* fout = fopen(filename.c_str(), "wb");
     if (fout == NULL)
         CV_Error_( Error::StsError, ("Can not open file %s for writing FLANN index\n", filename.c_str()) );
@@ -722,6 +727,7 @@ bool loadIndex(Index* index0, void*& index, const Mat& data, FILE* fin, const Di
 
 bool Index::load(InputArray _data, const String& filename)
 {
+    using namespace cvflann;
     Mat data = _data.getMat();
     bool ok = true;
     release();
