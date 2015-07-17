@@ -85,10 +85,12 @@ namespace cv
 namespace videostab
 {
 
+#ifndef __BORLANDC__
 WobbleSuppressorBase::WobbleSuppressorBase() : motions_(0), stabilizationMotions_(0)
 {
     setMotionEstimator(makePtr<KeypointBasedMotionEstimator>(makePtr<MotionEstimatorRansacL2>(MM_HOMOGRAPHY)));
 }
+#endif
 
 
 void NullWobbleSuppressor::suppress(int /*idx*/, const Mat &frame, Mat &result)

@@ -133,7 +133,7 @@ protected:
     std::vector<Mat> stabilizedFrames_;
     std::vector<Mat> stabilizedMasks_;
     std::vector<Mat> stabilizationMotions_;
-    clock_t processingStartTime_;
+    std::clock_t processingStartTime_;
 };
 
 class CV_EXPORTS OnePassStabilizer : public StabilizerBase, public IFrameSource

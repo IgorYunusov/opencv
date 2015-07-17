@@ -181,7 +181,7 @@ void StabilizerBase::setUp(const Mat &firstFrame)
     }
 
     log_->print("processing frames");
-    processingStartTime_ = clock();
+    processingStartTime_ = std::clock();
 }
 
 
@@ -237,15 +237,15 @@ void StabilizerBase::stabilizeFrame()
 Mat StabilizerBase::postProcessFrame(const Mat &frame)
 {
     // trim frame
-    int dx = static_cast<int>(floor(trimRatio_ * frame.cols));
-    int dy = static_cast<int>(floor(trimRatio_ * frame.rows));
+    int dx = static_cast<int>(std::floor(trimRatio_ * frame.cols));
+    int dy = static_cast<int>(std::floor(trimRatio_ * frame.rows));
     return frame(Rect(dx, dy, frame.cols - 2*dx, frame.rows - 2*dy));
 }
 
 
 void StabilizerBase::logProcessingTime()
 {
-    clock_t elapsedTime = clock() - processingStartTime_;
+    std::clock_t elapsedTime = std::clock() - processingStartTime_;
     log_->print("\nprocessing time: %.3f sec\n", static_cast<double>(elapsedTime) / CLOCKS_PER_SEC);
 }
 
@@ -376,7 +376,7 @@ void TwoPassStabilizer::runPrePassIfNecessary()
 
         // estimate motions
 
-        clock_t startTime = clock();
+        std::clock_t startTime = std::clock();
         log_->print("first pass: estimating motions");
 
         Mat prevFrame, frame;
@@ -415,7 +415,7 @@ void TwoPassStabilizer::runPrePassIfNecessary()
             frameCount_++;
         }
 
-        clock_t elapsedTime = clock() - startTime;
+        std::clock_t elapsedTime = std::clock() - startTime;
         log_->print("\nmotion estimation time: %.3f sec\n",
                     static_cast<double>(elapsedTime) / CLOCKS_PER_SEC);
 
@@ -426,13 +426,13 @@ void TwoPassStabilizer::runPrePassIfNecessary()
 
         // stabilize
 
-        startTime = clock();
+        startTime = std::clock();
 
         stabilizationMotions_.resize(frameCount_);
         motionStabilizer_->stabilize(
             frameCount_, motions_, std::make_pair(0, frameCount_ - 1), &stabilizationMotions_[0]);
 
-        elapsedTime = clock() - startTime;
+        elapsedTime = std::clock() - startTime;
         log_->print("motion stabilization time: %.3f sec\n",
                     static_cast<double>(elapsedTime) / CLOCKS_PER_SEC);
 

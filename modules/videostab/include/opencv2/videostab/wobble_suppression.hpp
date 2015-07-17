@@ -60,7 +60,11 @@ namespace videostab
 class CV_EXPORTS WobbleSuppressorBase
 {
 public:
+#ifdef __BORLANDC__
+    WobbleSuppressorBase() {setMotionEstimator(makePtr<KeypointBasedMotionEstimator>(makePtr<MotionEstimatorRansacL2>(MM_HOMOGRAPHY)));}
+#else
     WobbleSuppressorBase();
+#endif
 
     virtual ~WobbleSuppressorBase() {}
 
