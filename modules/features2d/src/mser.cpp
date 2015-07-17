@@ -723,7 +723,7 @@ static int preprocessMSER_8uC3( MSCRNode* node,
         lastptr += srccpt+3;
     }
     srcptr = src.ptr();
-    lastptr = srcptr+src.step;
+    lastptr = srcptr+(size_t)src.step;
     double* dyptr = dy.ptr<double>();
     for ( int i = 0; i < src.rows-1; i++ )
     {

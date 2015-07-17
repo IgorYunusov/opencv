@@ -8,19 +8,19 @@
 inline float getAngle(float x, float y) {
 
   if (x >= 0 && y >= 0) {
-    return atanf(y / x);
+    return std::atan(y / x);
   }
 
   if (x < 0 && y >= 0) {
-    return static_cast<float>(CV_PI)-atanf(-y / x);
+    return static_cast<float>(CV_PI)-std::atan(-y / x);
   }
 
   if (x < 0 && y < 0) {
-    return static_cast<float>(CV_PI)+atanf(y / x);
+    return static_cast<float>(CV_PI)+std::atan(y / x);
   }
 
   if (x >= 0 && y < 0) {
-    return static_cast<float>(2.0 * CV_PI) - atanf(-y / x);
+    return static_cast<float>(2.0 * CV_PI) - std::atan(-y / x);
   }
 
   return 0;
@@ -34,7 +34,7 @@ inline float getAngle(float x, float y) {
  * @param sig Standard Deviation
  */
 inline float gaussian(float x, float y, float sigma) {
-  return expf(-(x*x + y*y) / (2.0f*sigma*sigma));
+  return std::exp(-(x*x + y*y) / (2.0f*sigma*sigma));
 }
 
 /* ************************************************************************* */

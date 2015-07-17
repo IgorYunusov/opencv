@@ -347,20 +347,20 @@ static void computeOneToOneMatchedOverlaps( const std::vector<EllipticKeyPoint>&
             {
                 EllipticKeyPoint keypoint2a = EllipticKeyPoint( kp2.center, Scalar(fac*kp2.ellipse[0], fac*kp2.ellipse[1], fac*kp2.ellipse[2]) );
                 //find the largest eigenvalue
-                int maxx =  (int)ceil(( keypoint1a.boundingBox.width > (diff.x+keypoint2a.boundingBox.width)) ?
+                int maxx =  (int)std::ceil(( keypoint1a.boundingBox.width > (diff.x+keypoint2a.boundingBox.width)) ?
                                      keypoint1a.boundingBox.width : (diff.x+keypoint2a.boundingBox.width));
-                int minx = (int)floor((-keypoint1a.boundingBox.width < (diff.x-keypoint2a.boundingBox.width)) ?
+                int minx = (int)std::floor((-keypoint1a.boundingBox.width < (diff.x-keypoint2a.boundingBox.width)) ?
                                     -keypoint1a.boundingBox.width : (diff.x-keypoint2a.boundingBox.width));
 
-                int maxy =  (int)ceil(( keypoint1a.boundingBox.height > (diff.y+keypoint2a.boundingBox.height)) ?
+                int maxy =  (int)std::ceil(( keypoint1a.boundingBox.height > (diff.y+keypoint2a.boundingBox.height)) ?
                                      keypoint1a.boundingBox.height : (diff.y+keypoint2a.boundingBox.height));
-                int miny = (int)floor((-keypoint1a.boundingBox.height < (diff.y-keypoint2a.boundingBox.height)) ?
+                int miny = (int)std::floor((-keypoint1a.boundingBox.height < (diff.y-keypoint2a.boundingBox.height)) ?
                                     -keypoint1a.boundingBox.height : (diff.y-keypoint2a.boundingBox.height));
                 int mina = (maxx-minx) < (maxy-miny) ? (maxx-minx) : (maxy-miny) ;
 
                 //compute the area
                 float dr = (float)mina/50.f;
-                int N = (int)floor((float)(maxx - minx) / dr);
+                int N = (int)std::floor((float)(maxx - minx) / dr);
                 IntersectAreaCounter ac( dr, minx, miny, maxy, diff, keypoint1a.ellipse, keypoint2a.ellipse );
                 parallel_reduce( BlockedRange(0, N+1), ac );
                 if( ac.bna > 0 )

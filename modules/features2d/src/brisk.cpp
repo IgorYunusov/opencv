@@ -366,8 +366,8 @@ BRISK_Impl::generateKernel(const std::vector<float> &radiusList,
         {
           // the actual coordinates on the circle
           alpha = (double(num)) * 2 * CV_PI / double(numberList[ring]);
-          patternIterator->x = (float)(scaleList_[scale] * radiusList[ring] * cos(alpha + theta)); // feature rotation plus angle of the point
-          patternIterator->y = (float)(scaleList_[scale] * radiusList[ring] * sin(alpha + theta));
+          patternIterator->x = (float)(scaleList_[scale] * radiusList[ring] * std::cos(alpha + theta)); // feature rotation plus angle of the point
+          patternIterator->y = (float)(scaleList_[scale] * radiusList[ring] * std::sin(alpha + theta));
           // and the gaussian kernel sigma
           if (ring == 0)
           {
@@ -376,7 +376,7 @@ BRISK_Impl::generateKernel(const std::vector<float> &radiusList,
           else
           {
             patternIterator->sigma = (float)(sigma_scale * scaleList_[scale] * (double(radiusList[ring]))
-                                     * sin(CV_PI / numberList[ring]));
+                                     * std::sin(CV_PI / numberList[ring]));
           }
           // adapt the sizeList if necessary
           const unsigned int size = cvCeil(((scaleList_[scale] * radiusList[ring]) + patternIterator->sigma)) + 1;
@@ -442,7 +442,7 @@ BRISK_Impl::generateKernel(const std::vector<float> &radiusList,
   }
 
   // no bits:
-  strings_ = (int) ceil((float(noShortPairs_)) / 128.0) * 4 * 4;
+  strings_ = (int) std::ceil((float(noShortPairs_)) / 128.0) * 4 * 4;
 }
 
 // simple alternative:
@@ -730,7 +730,7 @@ BRISK_Impl::computeDescriptorsAndOrOrientation(InputArray _image, InputArray _ma
           direction0 += tmp0;
           direction1 += tmp1;
         }
-        kp.angle = (float)(atan2((float) direction1, (float) direction0) / CV_PI * 180.0);
+        kp.angle = (float)(std::atan2((float) direction1, (float) direction0) / CV_PI * 180.0);
 
         if (!doDescriptors)
         {
