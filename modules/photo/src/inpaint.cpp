@@ -218,10 +218,10 @@ static float FastMarching_solve(int i1,int j1,int i2,int j2, const CvMat* f, con
 
     if( CV_MAT_ELEM(*f,uchar,i1,j1) != INSIDE )
         if( CV_MAT_ELEM(*f,uchar,i2,j2) != INSIDE )
-            if( fabs(a11-a22) >= 1.0 )
+            if( std::fabs(a11-a22) >= 1.0 )
                 sol = 1+m12;
             else
-                sol = (a11+a22+sqrt((double)(2-(a11-a22)*(a11-a22))))*0.5;
+                sol = (a11+a22+std::sqrt((double)(2-(a11-a22)*(a11-a22))))*0.5;
         else
             sol = 1+a11;
     else if( CV_MAT_ELEM(*f,uchar,i2,j2) != INSIDE )
@@ -342,12 +342,12 @@ icvTeleaInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQu
                               r.y     = (float)(i-k);
                               r.x     = (float)(j-l);
 
-                              dst = (float)(1./(VectorLength(r)*sqrt((double)VectorLength(r))));
-                              lev = (float)(1./(1+fabs(CV_MAT_ELEM(*t,float,k,l)-CV_MAT_ELEM(*t,float,i,j))));
+                              dst = (float)(1./(VectorLength(r)*std::sqrt((double)VectorLength(r))));
+                              lev = (float)(1./(1+std::fabs(CV_MAT_ELEM(*t,float,k,l)-CV_MAT_ELEM(*t,float,i,j))));
 
                               dir=VectorScalMult(r,gradT);
-                              if (fabs(dir)<=0.01) dir=0.000001f;
-                              w = (float)fabs(dst*lev*dir);
+                              if (std::fabs(dir)<=0.01) dir=0.000001f;
+                              w = (float)std::fabs(dst*lev*dir);
 
                               if (CV_MAT_ELEM(*f,uchar,k,l+1)!=INSIDE) {
                                  if (CV_MAT_ELEM(*f,uchar,k,l-1)!=INSIDE) {
@@ -383,7 +383,7 @@ icvTeleaInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQu
                         }
                      }
                   }
-                  sat = (float)((Ia/s+(Jx+Jy)/(sqrt(Jx*Jx+Jy*Jy)+1.0e-20f)+0.5f));
+                  sat = (float)((Ia/s+(Jx+Jy)/(std::sqrt(Jx*Jx+Jy*Jy)+1.0e-20f)+0.5f));
                   {
                   CV_MAT_3COLOR_ELEM(*out,uchar,i-1,j-1,color) = cv::saturate_cast<uchar>(sat);
                   }
@@ -454,12 +454,12 @@ icvTeleaInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQu
                               r.y     = (float)(i-k);
                               r.x     = (float)(j-l);
 
-                              dst = (float)(1./(VectorLength(r)*sqrt(VectorLength(r))));
-                              lev = (float)(1./(1+fabs(CV_MAT_ELEM(*t,float,k,l)-CV_MAT_ELEM(*t,float,i,j))));
+                              dst = (float)(1./(VectorLength(r)*std::sqrt(VectorLength(r))));
+                              lev = (float)(1./(1+std::fabs(CV_MAT_ELEM(*t,float,k,l)-CV_MAT_ELEM(*t,float,i,j))));
 
                               dir=VectorScalMult(r,gradT);
-                              if (fabs(dir)<=0.01) dir=0.000001f;
-                              w = (float)fabs(dst*lev*dir);
+                              if (std::fabs(dir)<=0.01) dir=0.000001f;
+                              w = (float)std::fabs(dst*lev*dir);
 
                               if (CV_MAT_ELEM(*f,uchar,k,l+1)!=INSIDE) {
                                  if (CV_MAT_ELEM(*f,uchar,k,l-1)!=INSIDE) {
@@ -495,7 +495,7 @@ icvTeleaInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQu
                         }
                      }
                   }
-                  sat = (float)((Ia/s+(Jx+Jy)/(sqrt(Jx*Jx+Jy*Jy)+1.0e-20f)+0.5f));
+                  sat = (float)((Ia/s+(Jx+Jy)/(std::sqrt(Jx*Jx+Jy*Jy)+1.0e-20f)+0.5f));
                   {
                   CV_MAT_ELEM(*out,uchar,i-1,j-1) = cv::saturate_cast<uchar>(sat);
                   }
@@ -582,10 +582,10 @@ icvNSInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQueue
                               gradI.x=-gradI.x;
                               dir=VectorScalMult(r,gradI);
 
-                              if (fabs(dir)<=0.01) {
+                              if (std::fabs(dir)<=0.01) {
                                  dir=0.000001f;
                               } else {
-                                 dir = (float)fabs(VectorScalMult(r,gradI)/sqrt(VectorLength(r)*VectorLength(gradI)));
+                                 dir = (float)std::fabs(VectorScalMult(r,gradI)/std::sqrt(VectorLength(r)*VectorLength(gradI)));
                               }
                               w = dst*dir;
                               Ia += (float)w * (float)(CV_MAT_3COLOR_ELEM(*out,uchar,km,lm,color));
@@ -670,10 +670,10 @@ icvNSInpaintFMM(const CvMat *f, CvMat *t, CvMat *out, int range, CvPriorityQueue
                               gradI.x=-gradI.x;
                               dir=VectorScalMult(r,gradI);
 
-                              if (fabs(dir)<=0.01) {
+                              if (std::fabs(dir)<=0.01) {
                                  dir=0.000001f;
                               } else {
-                                 dir = (float)fabs(VectorScalMult(r,gradI)/sqrt(VectorLength(r)*VectorLength(gradI)));
+                                 dir = (float)std::fabs(VectorScalMult(r,gradI)/std::sqrt(VectorLength(r)*VectorLength(gradI)));
                               }
                               w = dst*dir;
                               Ia += (float)w * (float)(CV_MAT_ELEM(*out,uchar,km,lm));

@@ -45,6 +45,7 @@
 #include "opencv2/imgproc.hpp"
 //#include "opencv2/highgui.hpp"
 #include "hdr_common.hpp"
+#include <cstdlib>
 
 namespace cv
 {
@@ -80,7 +81,7 @@ public:
         std::vector<Point> sample_points;
         if(random) {
             for(int i = 0; i < samples; i++) {
-                sample_points.push_back(Point(rand() % images[0].cols, rand() % images[0].rows));
+                sample_points.push_back(Point(std::rand() % images[0].cols, std::rand() % images[0].rows));
             }
         } else {
             int x_points = static_cast<int>(sqrt(static_cast<double>(samples) * images[0].cols / images[0].rows));

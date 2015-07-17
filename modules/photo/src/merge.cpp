@@ -211,7 +211,7 @@ public:
             weights[i] = weights[i].mul(wellexp) + 1e-12f;
             weight_sum += weights[i];
         }
-        int maxlevel = static_cast<int>(logf(static_cast<float>(min(size.width, size.height))) / logf(2.0f));
+        int maxlevel = static_cast<int>(std::log(static_cast<float>(min(size.width, size.height))) / std::log(2.0f));
         std::vector<Mat> res_pyr(maxlevel + 1);
 
         for(size_t i = 0; i < images.size(); i++) {

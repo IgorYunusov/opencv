@@ -129,7 +129,7 @@ public:
         cvtColor(img, gray_img, COLOR_RGB2GRAY);
         Mat log_img;
         log_(gray_img, log_img);
-        float mean = expf(static_cast<float>(sum(log_img)[0]) / log_img.total());
+        float mean = std::exp(static_cast<float>(sum(log_img)[0]) / log_img.total());
         gray_img /= mean;
         log_img.release();
 
@@ -139,7 +139,7 @@ public:
         Mat map;
         log(gray_img + 1.0f, map);
         Mat div;
-        pow(gray_img / static_cast<float>(max), logf(bias) / logf(0.5f), div);
+        pow(gray_img / static_cast<float>(max), std::log(bias) / std::log(0.5f), div);
         log(2.0f + 8.0f * div, div);
         map = map.mul(1.0f / div);
         div.release();
@@ -408,7 +408,7 @@ public:
         r.copyTo(p);
 
         const float target_error = 1e-3f;
-        float target_norm = static_cast<float>(right.dot(right)) * powf(target_error, 2.0f);
+        float target_norm = static_cast<float>(right.dot(right)) * std::pow(target_error, 2.0f);
         int max_iterations = 100;
         float rr = static_cast<float>(r.dot(r));
 
@@ -495,7 +495,7 @@ protected:
 
     void getContrast(Mat src, std::vector<Mat>& x_contrast, std::vector<Mat>& y_contrast)
     {
-        int levels = static_cast<int>(logf(static_cast<float>(min(src.rows, src.cols))) / logf(2.0f));
+        int levels = static_cast<int>(std::log(static_cast<float>(min(src.rows, src.cols))) / std::log(2.0f));
         x_contrast.resize(levels);
         y_contrast.resize(levels);
 
