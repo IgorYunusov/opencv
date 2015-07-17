@@ -81,7 +81,7 @@ int cv::meanShift( InputArray _probImage, Rect& window, TermCriteria criteria )
         Moments m = isUMat ? moments(umat(cur_rect)) : moments(mat(cur_rect));
 
         // Calculating center of mass
-        if( fabs(m.m00) < DBL_EPSILON )
+        if( std::fabs(m.m00) < DBL_EPSILON )
             break;
 
         int dx = cvRound( m.m10/m.m00 - window.width*0.5 );
@@ -143,7 +143,7 @@ cv::RotatedRect cv::CamShift( InputArray _probImage, Rect& window,
     double m00 = m.m00, m10 = m.m10, m01 = m.m01;
     double mu11 = m.mu11, mu20 = m.mu20, mu02 = m.mu02;
 
-    if( fabs(m00) < DBL_EPSILON )
+    if( std::fabs(m00) < DBL_EPSILON )
         return RotatedRect();
 
     double inv_m00 = 1. / m00;
@@ -155,11 +155,11 @@ cv::RotatedRect cv::CamShift( InputArray _probImage, Rect& window,
     double square = std::sqrt( 4 * b * b + (a - c) * (a - c) );
 
     // Calculating orientation
-    double theta = atan2( 2 * b, a - c + square );
+    double theta = std::atan2( 2 * b, a - c + square );
 
     // Calculating width & length of figure
-    double cs = cos( theta );
-    double sn = sin( theta );
+    double cs = std::cos( theta );
+    double sn = std::sin( theta );
 
     double rotate_a = cs * cs * mu20 + 2 * cs * sn * mu11 + sn * sn * mu02;
     double rotate_c = sn * sn * mu20 - 2 * cs * sn * mu11 + cs * cs * mu02;
@@ -178,14 +178,14 @@ cv::RotatedRect cv::CamShift( InputArray _probImage, Rect& window,
     int _xc = cvRound( xc );
     int _yc = cvRound( yc );
 
-    int t0 = cvRound( fabs( length * cs ));
-    int t1 = cvRound( fabs( width * sn ));
+    int t0 = cvRound( std::fabs( length * cs ));
+    int t1 = cvRound( std::fabs( width * sn ));
 
     t0 = MAX( t0, t1 ) + 2;
     window.width = MIN( t0, (size.width - _xc) * 2 );
 
-    t0 = cvRound( fabs( length * sn ));
-    t1 = cvRound( fabs( width * cs ));
+    t0 = cvRound( std::fabs( length * sn ));
+    t1 = cvRound( std::fabs( width * cs ));
 
     t0 = MAX( t0, t1 ) + 2;
     window.height = MIN( t0, (size.height - _yc) * 2 );

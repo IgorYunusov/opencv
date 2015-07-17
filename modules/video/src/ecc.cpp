@@ -299,15 +299,15 @@ static void update_warping_matrix_ECC (Mat& map_matrix, const Mat& update, const
     if (motionType == MOTION_EUCLIDEAN) {
         double new_theta = updatePtr[0];
         if (mapPtr[3]>0)
-            new_theta += acos(mapPtr[0]);
+            new_theta += std::acos(mapPtr[0]);
 
         if (mapPtr[3]<0)
-            new_theta -= acos(mapPtr[0]);
+            new_theta -= std::acos(mapPtr[0]);
 
         mapPtr[2] += updatePtr[1];
         mapPtr[5] += updatePtr[2];
-        mapPtr[0] = mapPtr[4] = (float) cos(new_theta);
-        mapPtr[3] = (float) sin(new_theta);
+        mapPtr[0] = mapPtr[4] = (float) std::cos(new_theta);
+        mapPtr[3] = (float) std::sin(new_theta);
         mapPtr[1] = -mapPtr[3];
     }
 }
@@ -459,7 +459,7 @@ double cv::findTransformECC(InputArray templateImage,
     // iteratively update map_matrix
     double rho      = -1;
     double last_rho = - termination_eps;
-    for (int i = 1; (i <= numberOfIterations) && (fabs(rho-last_rho)>= termination_eps); i++)
+    for (int i = 1; (i <= numberOfIterations) && (std::fabs(rho-last_rho)>= termination_eps); i++)
     {
 
         // warp-back portion of the inputImage and gradients to the coordinate space of the templateImage

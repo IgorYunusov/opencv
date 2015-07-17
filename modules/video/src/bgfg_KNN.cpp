@@ -288,7 +288,7 @@ CV_INLINE void
     if (m_nLongCounter == (m_nLongUpdate-1))
     {
         //m_nNextLongUpdate[pixel] = (uchar)(((m_nLongUpdate)*(rand()-1))/RAND_MAX);//0,...m_nLongUpdate-1;
-        m_nNextLongUpdate[pixel] = (uchar)( rand() % m_nLongUpdate );//0,...m_nLongUpdate-1;
+        m_nNextLongUpdate[pixel] = (uchar)( std::rand() % m_nLongUpdate );//0,...m_nLongUpdate-1;
     };
 
     // Mid update?
@@ -301,7 +301,7 @@ CV_INLINE void
     };
     if (m_nMidCounter == (m_nMidUpdate-1))
     {
-        m_nNextMidUpdate[pixel] = (uchar)( rand() % m_nMidUpdate );
+        m_nNextMidUpdate[pixel] = (uchar)( std::rand() % m_nMidUpdate );
     };
 
     // Short update?
@@ -316,7 +316,7 @@ CV_INLINE void
     };
     if (m_nShortCounter == (m_nShortUpdate-1))
     {
-        m_nNextShortUpdate[pixel] = (uchar)( rand() % m_nShortUpdate );
+        m_nNextShortUpdate[pixel] = (uchar)( std::rand() % m_nShortUpdate );
     };
 };
 

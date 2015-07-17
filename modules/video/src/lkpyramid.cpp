@@ -1480,11 +1480,11 @@ cv::Mat cv::estimateRigidTransform( InputArray src1, InputArray src2, bool fullA
                     if( idx[j] == idx[i] )
                         break;
                     // check that the points are not very close one each other
-                    if( fabs(pA[idx[i]].x - pA[idx[j]].x) +
-                        fabs(pA[idx[i]].y - pA[idx[j]].y) < FLT_EPSILON )
+                    if( std::fabs(pA[idx[i]].x - pA[idx[j]].x) +
+                        std::fabs(pA[idx[i]].y - pA[idx[j]].y) < FLT_EPSILON )
                         break;
-                    if( fabs(pB[idx[i]].x - pB[idx[j]].x) +
-                        fabs(pB[idx[i]].y - pB[idx[j]].y) < FLT_EPSILON )
+                    if( std::fabs(pB[idx[i]].x - pB[idx[j]].x) +
+                        std::fabs(pB[idx[i]].y - pB[idx[j]].y) < FLT_EPSILON )
                         break;
                 }
 
@@ -1508,8 +1508,8 @@ cv::Mat cv::estimateRigidTransform( InputArray src1, InputArray src2, bool fullA
                     double dbx2 = b[2].x - b[0].x, dby2 = b[2].y - b[0].y;
                     const double eps = 0.01;
 
-                    if( fabs(dax1*day2 - day1*dax2) < eps*std::sqrt(dax1*dax1+day1*day1)*std::sqrt(dax2*dax2+day2*day2) ||
-                        fabs(dbx1*dby2 - dby1*dbx2) < eps*std::sqrt(dbx1*dbx1+dby1*dby1)*std::sqrt(dbx2*dbx2+dby2*dby2) )
+                    if( std::fabs(dax1*day2 - day1*dax2) < eps*std::sqrt(dax1*dax1+day1*day1)*std::sqrt(dax2*dax2+day2*day2) ||
+                        std::fabs(dbx1*dby2 - dby1*dbx2) < eps*std::sqrt(dbx1*dbx1+dby1*dby1)*std::sqrt(dbx2*dbx2+dby2*dby2) )
                         continue;
                 }
                 break;

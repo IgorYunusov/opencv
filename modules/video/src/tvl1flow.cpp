@@ -86,6 +86,22 @@ using namespace cv;
 
 namespace {
 
+// std::hypot is a part of C++11 and it is not supported under XE7
+#if defined __BORLANDC__
+double
+hypot(double x, double y)
+{
+    // https://en.wikipedia.org/wiki/Hypot
+    double t;
+    x = std::abs(x);
+    y = std::abs(y);
+    t = std::min(x,y);
+    x = std::max(x,y);
+    t = t/x;
+    return x*std::sqrt(1+t*t);
+}
+#endif
+
 class OpticalFlowDual_TVL1 : public DualTVL1OpticalFlow
 {
 public:
@@ -1203,7 +1219,7 @@ bool OpticalFlowDual_TVL1::procOneScale_ocl(const UMat& I0, const UMat& I1, UMat
     UMat I1x = dum.I1x_buf(Rect(0, 0, I0.cols, I0.rows));
     UMat I1y = dum.I1y_buf(Rect(0, 0, I0.cols, I0.rows));
 
-    if (!centeredGradient(I1, I1x, I1y))
+    if (!cv_ocl_tvl1flow::centeredGradient(I1, I1x, I1y))
         return false;
 
     UMat I1w = dum.I1w_buf(Rect(0, 0, I0.cols, I0.rows));
@@ -1247,7 +1263,7 @@ bool OpticalFlowDual_TVL1::procOneScale_ocl(const UMat& I0, const UMat& I1, UMat
                 // some tweaks to make sum operation less frequently
                 n = n_inner + n_outer*innerIterations;
                 char calc_error = (n & 0x1) && (prev_error < scaledEpsilon);
-                if (!estimateU(I1wx, I1wy, grad, rho_c, p11, p12, p21, p22,
+                if (!cv_ocl_tvl1flow::estimateU(I1wx, I1wy, grad, rho_c, p11, p12, p21, p22,
                     u1, u2, diff, l_t, static_cast<float>(theta), calc_error))
                     return false;
                 if (calc_error)
@@ -1260,7 +1276,7 @@ bool OpticalFlowDual_TVL1::procOneScale_ocl(const UMat& I0, const UMat& I1, UMat
                     error = std::numeric_limits<double>::max();
                     prev_error -= scaledEpsilon;
                 }
-                if (!estimateDualVariables(u1, u2, p11, p12, p21, p22, taut))
+                if (!cv_ocl_tvl1flow::estimateDualVariables(u1, u2, p11, p12, p21, p22, taut))
                     return false;
             }
         }
