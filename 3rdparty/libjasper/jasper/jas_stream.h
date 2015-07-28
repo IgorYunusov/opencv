@@ -100,6 +100,16 @@ extern "C" {
 #define O_BINARY	0
 #endif
 
+/* Embarcadero doesnt know O_TEMPORARY */
+#ifdef __BORLANDC__
+#ifndef O_TEMPORARY
+#define O_TEMPORARY  0
+#endif
+#ifndef _O_SHORT_LIVED
+#define _O_SHORT_LIVED  0
+#endif
+#endif
+
 /*
  * Stream open flags.
  */
