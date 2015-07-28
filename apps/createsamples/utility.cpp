@@ -41,6 +41,7 @@
 
 #include <cstring>
 #include <ctime>
+#include <stdio.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -509,7 +510,7 @@ void icvRandomQuad( int width, int height, double quad[4][2],
     vect = cvMat( 3, 1, CV_64FC1, &vectData[0] );
 
     rotVectData[0] = maxxangle * (2.0 * rand() / RAND_MAX - 1.0);
-    rotVectData[1] = ( maxyangle - fabs( rotVectData[0] ) )
+    rotVectData[1] = ( maxyangle - std::fabs( rotVectData[0] ) )
         * (2.0 * rand() / RAND_MAX - 1.0);
     rotVectData[2] = maxzangle * (2.0 * rand() / RAND_MAX - 1.0);
     d = (distfactor + distfactor2 * (2.0 * rand() / RAND_MAX - 1.0)) * width;
@@ -876,7 +877,7 @@ CvBackgroundData* icvCreateBackgroundData( const char* filename, CvSize winsize 
             if( !fgets( imgfilename, PATH_MAX - (int)(imgfilename - full) - 1, input ))
                 break;
             len = (int)strlen( imgfilename );
-            for( ; len > 0 && isspace(imgfilename[len-1]); len-- )
+            for( ; len > 0 && std::isspace(imgfilename[len-1]); len-- )
                 imgfilename[len-1] = '\0';
             if( len > 0 )
             {
@@ -1628,7 +1629,7 @@ void cvShowVecSamples( const char* filename, int winwidth, int winheight,
                 winwidth, winheight, file.vecsize );
             if( file.vecsize > 0 )
             {
-                guessed_w = cvFloor( sqrt( (float) file.vecsize ) );
+                guessed_w = cvFloor( std::sqrt( (float) file.vecsize ) );
                 if( guessed_w > 0 )
                 {
                     guessed_h = file.vecsize / guessed_w;
