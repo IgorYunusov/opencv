@@ -21,7 +21,7 @@ private:
         void restart();
 
         short* vec;
-        FILE*  file;
+        std::FILE*  file;
         int    count;
         int    vecSize;
         int    last;

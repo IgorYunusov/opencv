@@ -239,7 +239,7 @@ void CvCascadeBoostParams::write( FileStorage &fs ) const
     string boostTypeStr = boost_type == CvBoost::DISCRETE ? CC_DISCRETE_BOOST :
                           boost_type == CvBoost::REAL ? CC_REAL_BOOST :
                           boost_type == CvBoost::LOGIT ? CC_LOGIT_BOOST :
-                          boost_type == CvBoost::GENTLE ? CC_GENTLE_BOOST : string();
+                          boost_type == CvBoost::GENTLE ? CC_GENTLE_BOOST : "";
     CV_Assert( !boostTypeStr.empty() );
     fs << CC_BOOST_TYPE << boostTypeStr;
     fs << CC_MINHITRATE << minHitRate;
@@ -292,7 +292,7 @@ void CvCascadeBoostParams::printAttrs() const
     string boostTypeStr = boost_type == CvBoost::DISCRETE ? CC_DISCRETE_BOOST :
                           boost_type == CvBoost::REAL ? CC_REAL_BOOST :
                           boost_type == CvBoost::LOGIT  ? CC_LOGIT_BOOST :
-                          boost_type == CvBoost::GENTLE ? CC_GENTLE_BOOST : string();
+                          boost_type == CvBoost::GENTLE ? CC_GENTLE_BOOST : "";
     CV_Assert( !boostTypeStr.empty() );
     cout << "boostType: " << boostTypeStr << endl;
     cout << "minHitRate: " << minHitRate << endl;

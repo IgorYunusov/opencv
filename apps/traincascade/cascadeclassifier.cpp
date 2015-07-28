@@ -24,7 +24,7 @@ CvCascadeParams::CvCascadeParams( int _stageType, int _featureType ) : stageType
 
 void CvCascadeParams::write( FileStorage &fs ) const
 {
-    string stageTypeStr = stageType == BOOST ? CC_BOOST : string();
+    string stageTypeStr = stageType == BOOST ? CC_BOOST : "";
     CV_Assert( !stageTypeStr.empty() );
     fs << CC_STAGE_TYPE << stageTypeStr;
     string featureTypeStr = featureType == CvFeatureParams::HAAR ? CC_HAAR :

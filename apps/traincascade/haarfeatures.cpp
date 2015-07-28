@@ -28,7 +28,7 @@ void CvHaarFeatureParams::write( FileStorage &fs ) const
     CvFeatureParams::write( fs );
     string modeStr = mode == BASIC ? CC_MODE_BASIC :
                      mode == CORE ? CC_MODE_CORE :
-                     mode == ALL ? CC_MODE_ALL : string();
+                     mode == ALL ? CC_MODE_ALL : "";
     CV_Assert( !modeStr.empty() );
     fs << CC_MODE << modeStr;
 }

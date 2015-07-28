@@ -2059,7 +2059,9 @@ typedef CvANN_MLP NeuralNet_MLP;
 typedef CvGBTreesParams GradientBoostingTreeParams;
 typedef CvGBTrees GradientBoostingTrees;
 
+#ifndef __BORLANDC__
 template<> void DefaultDeleter<CvDTreeSplit>::operator ()(CvDTreeSplit* obj) const;
+#endif
 }
 
 #endif // __cplusplus
